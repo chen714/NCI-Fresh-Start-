@@ -1,5 +1,5 @@
-import 'package:flash_chat/screens/chat_screen.dart';
-import 'package:flash_chat/screens/timetable_screen.dart';
+import 'package:flash_chat/screens/home/chat_screen.dart';
+import 'package:flash_chat/screens/home/timetable_screen.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatelessWidget {

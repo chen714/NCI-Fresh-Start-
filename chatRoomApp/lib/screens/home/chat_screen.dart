@@ -1,4 +1,6 @@
 import 'package:flash_chat/components/drawer.dart';
+import 'package:flash_chat/screens/auth_screens/welcome_screen.dart';
+import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
+  final _authService = AuthService();
   final _auth = FirebaseAuth.instance;
 
   String messageText;
@@ -65,8 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: Icon(Icons.close),
               onPressed: () {
                 //Implement logout functionality
-                _auth.signOut();
-                Navigator.pop(context);
+                _authService.signOut();
+                return WelcomeScreen();
               }),
         ],
         title: Text('BSc in Computing Chat'),
