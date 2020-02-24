@@ -1,4 +1,4 @@
-import 'package:flash_chat/screens/auth_screens/welcome_screen.dart';
+import 'package:flash_chat/screens/auth_screens/local_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/authService.dart';
@@ -12,7 +12,7 @@ class FlashChat extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-        home: WelcomeScreen(),
+        home: LocalAuth(),
       ),
     );
   }
