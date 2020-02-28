@@ -25,7 +25,12 @@ class DrawerWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ChatScreen.id);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return ChatScreen();
+                }),
+              );
             },
             child: ListTile(
               title: Text('Class Chat'),
@@ -35,7 +40,7 @@ class DrawerWidget extends StatelessWidget {
           Divider(),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ChatScreen.id);
+              return ChatScreen();
             },
             child: ListTile(
               title: Text('Virtual Assistant'),
@@ -45,7 +50,13 @@ class DrawerWidget extends StatelessWidget {
           Divider(),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, TimetableScreen.id);
+              print('------------------------------TIMETABLE');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return TimetableScreen();
+                }),
+              );
             },
             child: ListTile(
               title: Text('Timetable'),
@@ -55,7 +66,7 @@ class DrawerWidget extends StatelessWidget {
           Divider(),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ChatScreen.id);
+              return ChatScreen();
             },
             child: ListTile(
               title: Text('Class Updates'),

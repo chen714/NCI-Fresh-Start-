@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:core';
@@ -10,7 +11,7 @@ class LocalAuthService {
     try {
       checkBiometric = await _localAuthentication.canCheckBiometrics;
     } on PlatformException catch (e) {
-      print(e);
+      print('!!!!!!!!!!!!!!!!!!!!!! platform error: $e');
       return false;
     }
     return checkBiometric;
@@ -28,27 +29,38 @@ class LocalAuthService {
       if (listofBiometric.contains(BiometricType.fingerprint)) {
         return true;
       } else {
+        print('!!!!!!!!!!!!!!!!!!!!!! Finger print not set up');
         return false;
       }
     } else {
+      print('!!!!!!!!!!!!!!!!!!!!!! Check biometric returned false ');
       return false;
     }
   }
 
-  Future<bool> authorizeNow() async {
+  Future<bool> _authenticate() async {
     bool isAuthorized = false;
+    isAuthorized = await _localAuthentication.authenticateWithBiometrics(
+      localizedReason: "Please authenticate to login",
+      useErrorDialogs: true,
+      stickyAuth: false,
+    );
+    return isAuthorized;
+  }
+
+  Future<bool> authorizeNow() async {
+    bool isAuth = false;
     if (await _checkFingerPrint()) {
       try {
-        isAuthorized = await _localAuthentication.authenticateWithBiometrics(
-          localizedReason: "Please authenticate to login",
-          useErrorDialogs: true,
-          stickyAuth: true,
-        );
+        isAuth = await _authenticate();
       } on PlatformException catch (e) {
+        print(
+            '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ platform error: $e');
         return false;
       }
-      return isAuthorized;
+      return isAuth;
     } else {
+      print('!!!!!!!!!!!!!!!!!!!!!! Check fingerprint  returned false ');
       return false;
     }
   }

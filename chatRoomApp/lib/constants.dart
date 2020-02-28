@@ -12,6 +12,8 @@ const kMessageTextFieldDecoration = InputDecoration(
   border: InputBorder.none,
 );
 
+final List<String> kCourseCode = ['BSHC1', 'BSHC2', 'BSHC3', 'BSHC4'];
+
 const kMessageContainerDecoration = BoxDecoration(
   border: Border(
     top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
