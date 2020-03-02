@@ -1,4 +1,5 @@
 import 'package:flash_chat/screens/home/chat_screen.dart';
+import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:flash_chat/screens/home/timetable_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,13 @@ class DrawerWidget extends StatelessWidget {
           Divider(),
           InkWell(
             onTap: () {
-              return ChatScreen();
+              print('------------------------------VIRTUAL ASSISTANT');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return NCIBotDialogFlow();
+                }),
+              );
             },
             child: ListTile(
               title: Text('Virtual Assistant'),
