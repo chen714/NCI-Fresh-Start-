@@ -2,6 +2,9 @@ import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:flash_chat/screens/home/timetable_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flash_chat/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class DrawerWidget extends StatelessWidget {
   final String title;
@@ -10,16 +13,21 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
     return Drawer(
       child: new ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("x1689723@student.ncirl.ie"),
+            accountName: Text(user.email),
             currentAccountPicture: GestureDetector(
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://img2.thejournal.ie/inline/1881369/original/?width=630&version=1881369"),
-                backgroundColor: Colors.white,
+              child: CircularProfileAvatar(
+                '',
+                radius: 25,
+                backgroundColor: Colors.indigo,
+                initialsText: Text(
+                  user.email[0],
+                  style: TextStyle(fontSize: 40, color: Colors.white),
+                ),
               ),
             ),
             decoration: BoxDecoration(color: Colors.lightBlueAccent),

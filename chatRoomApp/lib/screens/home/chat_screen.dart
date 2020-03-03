@@ -1,23 +1,24 @@
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:flash_chat/screens/auth_screens/welcome_screen.dart';
 import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
-
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 
 final _firestore = Firestore.instance;
+final key = encrypt.Key.fromLength(32);
+final iv = encrypt.IV.fromLength(16);
+final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
 User loggedInUser;
 UserData userData;
 UserDbService _userDbService;
 String courseCode;
 
 class ChatScreen extends StatefulWidget {
-  static const id = 'chat_screen';
-
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -69,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
-        title: Text('$courseCode Chat'),
+        title: Text('$courseCode Chat 🚀'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -99,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                       _firestore.collection('messages-$courseCode').add({
                         'sentOn': DateTime.now(),
-                        'text': messageText,
+                        'text': encrypter.encrypt(messageText, iv: iv).base64,
                         'sender': loggedInUser.email,
                       });
                     },
@@ -145,7 +146,7 @@ class MessageStream extends StatelessWidget {
 
             final messageBubble = MessageBubble(
               sender: messageSender,
-              text: messageText,
+              text: encrypter.decrypt64(messageText, iv: iv),
               isMe: messageSender == userLoggedIn,
             );
 
