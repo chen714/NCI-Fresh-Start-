@@ -54,7 +54,6 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
           CardDialogflow(response.getListMessage()[0]).title,
       sender: "Flutter Bot",
       isMe: false,
-      isBot: true,
     );
     setState(() {
       _messages.insert(0, message);
@@ -67,7 +66,6 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
       text: text,
       sender: "Meeeee",
       isMe: true,
-      isBot: false,
     );
     setState(() {
       _messages.insert(0, message);

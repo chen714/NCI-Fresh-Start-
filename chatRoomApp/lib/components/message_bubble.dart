@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.isMe, this.isBot});
+  MessageBubble({this.sender, this.text, this.isMe});
 
   final String sender;
   final String text;
   final bool isMe;
-  final bool isBot;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +44,7 @@ class MessageBubble extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: SizedBox(
-                          width: isBot ? 200 : null,
+                          width: text.length > 30 ?? false ? 200 : null,
                           child: Text(
                             '$text',
                             softWrap: true,
@@ -113,7 +112,7 @@ class MessageBubble extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: SizedBox(
-                          width: isBot ? 200 : null,
+                          width: text.length > 30 ? 200 : null,
                           child: Text(
                             '$text',
                             softWrap: true,

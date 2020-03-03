@@ -151,7 +151,6 @@ class MessageStream extends StatelessWidget {
               sender: messageSender,
               text: messageText,
               isMe: messageSender == userLoggedIn,
-              isBot: false,
             );
 
             messageWidgets.add(messageBubble);
