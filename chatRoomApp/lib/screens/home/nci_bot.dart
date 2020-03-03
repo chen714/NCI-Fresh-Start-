@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:flash_chat/models/user.dart';
+import 'package:provider/provider.dart';
+
+User user;
 
 class NCIBotDialogFlow extends StatefulWidget {
   NCIBotDialogFlow({Key key, this.title}) : super(key: key);
@@ -16,6 +20,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
   final TextEditingController _textController = new TextEditingController();
 
   Widget _queryInputWidget(BuildContext context) {
+    user = Provider.of<User>(context);
     return Container(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
@@ -51,8 +56,8 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     AIResponse response = await dialogFlow.detectIntent(query);
     MessageBubble message = MessageBubble(
       text: response.getMessage() ??
-          CardDialogflow(response.getListMessage()[0]).title,
-      sender: "Flutter Bot",
+          'Opps Something went wrong, try asking me a question again.',
+      sender: "NCI Bot",
       isMe: false,
     );
     setState(() {
@@ -64,7 +69,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     _textController.clear();
     MessageBubble message = new MessageBubble(
       text: text,
-      sender: "Meeeee",
+      sender: user.email,
       isMe: true,
     );
     setState(() {

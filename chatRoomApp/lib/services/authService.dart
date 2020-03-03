@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/models/user.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -7,6 +8,11 @@ class AuthService {
   //create user object based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid, email: user.email) : null;
+  }
+
+  //getCurrentLoggedInUser
+  Future<User> currentUser() async {
+    return _userFromFirebaseUser(await _auth.currentUser());
   }
 
   //auth change user stream

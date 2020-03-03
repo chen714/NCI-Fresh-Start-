@@ -1,14 +1,19 @@
 import 'package:flash_chat/components/drawer.dart';
+import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/auth_screens/welcome_screen.dart';
+import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 
 final _firestore = Firestore.instance;
-FirebaseUser loggedInUser;
+User loggedInUser;
+UserData userData;
+UserDbService _userDbService;
+String courseCode;
 
 class ChatScreen extends StatefulWidget {
   static const id = 'chat_screen';
@@ -20,7 +25,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _authService = AuthService();
-  final _auth = FirebaseAuth.instance;
 
   String messageText;
 
@@ -28,33 +32,25 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentUser();
+    getCurrentUserData();
   }
 
-  void getCurrentUser() async {
+  void getCurrentUserData() async {
     try {
-      final user = await _auth.currentUser();
+      final user = await _authService.currentUser();
       if (user != null) {
         loggedInUser = user;
+        _userDbService = UserDbService(uid: loggedInUser.uid);
+        userData = await _userDbService.getUserDataFromUid();
+        setState(() {
+          courseCode = userData.courseCode;
+        });
+
+        print('----------------------------------$courseCode');
         print(loggedInUser.email);
       }
     } catch (e) {
       print(e);
-    }
-  }
-
-//  void getMessages() async {
-//    final messages = await _firestore.collection('messages').getDocuments();
-//    for (var messages in messages.documents) {
-//      print(messages.data);
-//    }
-//  }
-
-  void messageStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var messages in snapshot.documents) {
-        print(messages.data);
-      }
     }
   }
 
@@ -70,10 +66,10 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 //Implement logout functionality
                 _authService.signOut();
-                return WelcomeScreen();
+                Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
-        title: Text('BSc in Computing Chat'),
+        title: Text('$courseCode Chat'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -101,7 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () {
                       messageTextController.clear();
 
-                      _firestore.collection('messages').add({
+                      _firestore.collection('messages-$courseCode').add({
                         'sentOn': DateTime.now(),
                         'text': messageText,
                         'sender': loggedInUser.email,
@@ -127,7 +123,7 @@ class MessageStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _firestore
-            .collection('messages')
+            .collection('messages-$courseCode')
             .orderBy('sentOn', descending: false)
             .snapshots(),
         builder: (context, snapshot) {

@@ -22,6 +22,7 @@ class _SetUserDataState extends State<SetUserData> {
   String _name;
 
   String _courseCode;
+  String _error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -120,24 +121,33 @@ class _SetUserDataState extends State<SetUserData> {
                             RoundedButton(
                               colour: Colors.lightBlue,
                               title: '⚡ Sign Me Up!',
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  await userDbService.updateUserData(
-                                      email: widget.email,
-                                      name: _name,
-                                      isFaculty: false,
-                                      courseCode: _courseCode);
-                                  return ChatScreen();
-//                            Navigator.push(
-//                              context,
-//                              MaterialPageRoute(builder: (context) {
-//                                return ChatScreen();
-//                              }),
-//                            );
-                                } else {
-                                  return Text('Invalid input ');
-                                }
+                              onPressed: () {
+                                setState(() async {
+                                  if (_formKey.currentState.validate()) {
+                                    await userDbService.updateUserData(
+                                        email: widget.email,
+                                        name: _name,
+                                        isFaculty: false,
+                                        courseCode: _courseCode);
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return ChatScreen();
+                                      }),
+                                    );
+                                  } else {
+                                    _error =
+                                        '⛔ Opps... Something went wrong, try again later';
+                                  }
+                                });
                               },
+                            ),
+                            SizedBox(height: 12.0),
+                            Text(
+                              _error,
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 14.0),
                             )
                           ],
                         ),

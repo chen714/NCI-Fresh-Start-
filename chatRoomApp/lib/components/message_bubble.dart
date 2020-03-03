@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class MessageBubble extends StatelessWidget {
   MessageBubble({this.sender, this.text, this.isMe});
@@ -20,7 +21,7 @@ class MessageBubble extends StatelessWidget {
                       isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      isMe ? sender : "Bot",
+                      sender,
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black38,
@@ -60,12 +61,21 @@ class MessageBubble extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    maxRadius: 25,
-                    backgroundImage: NetworkImage(isMe
-                        ? "https://img2.thejournal.ie/inline/1881369/original/?width=630&version=1881369"
-                        : "https://clipground.com/images/bot-clipart-8.jpg"),
-                  ),
+                  child: sender == 'NCI Bot'
+                      ? CircleAvatar(
+                          maxRadius: 25,
+                          backgroundImage: NetworkImage(
+                              "https://clipground.com/images/bot-clipart-8.jpg"))
+                      : CircularProfileAvatar(
+                          '',
+                          radius: 25,
+                          backgroundColor:
+                              isMe ? Colors.indigo : Colors.blueGrey,
+                          initialsText: Text(
+                            sender[0],
+                            style: TextStyle(fontSize: 40, color: Colors.white),
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -76,19 +86,28 @@ class MessageBubble extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    maxRadius: 25,
-                    backgroundImage: NetworkImage(isMe
-                        ? "https://img2.thejournal.ie/inline/1881369/original/?width=630&version=1881369"
-                        : "https://clipground.com/images/bot-clipart-8.jpg"),
-                  ),
+                  child: sender == 'NCI Bot'
+                      ? CircleAvatar(
+                          maxRadius: 25,
+                          backgroundImage: NetworkImage(
+                              "https://clipground.com/images/bot-clipart-8.jpg"))
+                      : CircularProfileAvatar(
+                          '',
+                          radius: 25,
+                          backgroundColor:
+                              isMe ? Colors.indigo : Colors.blueGrey,
+                          initialsText: Text(
+                            sender[0],
+                            style: TextStyle(fontSize: 40, color: Colors.white),
+                          ),
+                        ),
                 ),
                 Column(
                   crossAxisAlignment:
                       isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      isMe ? sender : "Bot",
+                      sender,
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black38,

@@ -34,16 +34,11 @@ class UserDbService {
 
   Future<dynamic> getUserDataFromUid() async {
     DocumentSnapshot doc = await _userCollection.document(uid).get();
-    print(
-        '____________!!!!!!!!!!!!!!!!!!!user data: ${doc.data.toString()}!!!!!!!!!!!!!!!!!!!!!!_________');
     return doc.data != null ? _userFromDocument(doc) : null;
   }
 
   Future<bool> doesUserExist() async {
-    print('*********************************uid is: $uid');
     DocumentSnapshot doc = await _userCollection.document(uid).get();
-    print('********************************* ${doc.data}');
-    print('********************************* doc.exists: ${doc.exists}');
     if (doc.exists) {
       return true;
     } else {
