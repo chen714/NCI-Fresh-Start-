@@ -59,6 +59,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
           'Opps Something went wrong, try asking me a question again.',
       sender: "NCI Bot",
       isMe: false,
+      dateTime: DateTime.now(),
     );
     setState(() {
       _messages.insert(0, message);
@@ -71,6 +72,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
       text: text,
       sender: user.email,
       isMe: true,
+      dateTime: DateTime.now(),
     );
     setState(() {
       _messages.insert(0, message);

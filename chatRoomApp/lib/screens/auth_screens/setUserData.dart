@@ -29,136 +29,224 @@ class _SetUserDataState extends State<SetUserData> {
     print('++++++++++++++++++++++++++++++++++++++++++++++++ ${widget.uid}');
 
     UserDbService userDbService = UserDbService(uid: widget.uid);
-
-    return FutureBuilder<bool>(
-        future: userDbService.doesUserExist(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) {
-            return Loading();
-          } else {
-            if (snapshot.data == true) {
-              return ChatScreen();
+    if (widget.email.contains('@ncirl.ie')) {
+      return FutureBuilder<bool>(
+          future: userDbService.doesUserExist(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return Loading();
             } else {
-              return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.lightBlue,
-                  elevation: 0.0,
-                  title: Text('🚀 Sign up NCI Fresh Start '),
-                ),
-                body: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-                  child: ListView(
-                    children: <Widget>[
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              'Please enter your name and course details.',
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter your name',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Required' : null,
-                              onChanged: (value) {
-                                setState(() {
-                                  _name = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              alignment: Alignment.bottomCenter,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 100,
-                                    child: Text(
-                                      'Please select course: ',
-                                      style: TextStyle(fontSize: 14),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 150,
-                                    child: DropdownButtonFormField(
-                                      decoration: kTextFieldDecoration,
-                                      value: _courseCode,
-                                      icon: Icon(Icons.keyboard_arrow_down),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      style: TextStyle(color: Colors.black),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          _courseCode = newValue;
-                                        });
-                                      },
-                                      items: kCourseCode.map((courCode) {
-                                        return DropdownMenuItem(
-                                          value: courCode,
-                                          child: Text('$courCode'),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            RoundedButton(
-                              colour: Colors.lightBlue,
-                              title: '⚡ Sign Me Up!',
-                              onPressed: () {
-                                setState(() async {
-                                  if (_formKey.currentState.validate()) {
-                                    await userDbService.updateUserData(
-                                        email: widget.email,
-                                        name: _name,
-                                        isFaculty: false,
-                                        courseCode: _courseCode);
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return ChatScreen();
-                                      }),
-                                    );
-                                  } else {
-                                    _error =
-                                        '⛔ Opps... Something went wrong, try again later';
-                                  }
-                                });
-                              },
-                            ),
-                            SizedBox(height: 12.0),
-                            Text(
-                              _error,
-                              style:
-                                  TextStyle(color: Colors.red, fontSize: 14.0),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+              if (snapshot.data == true) {
+                return ChatScreen();
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.lightBlue,
+                    elevation: 0.0,
+                    title: Text('🚀 Sign up NCI Fresh Start '),
                   ),
-                ),
-              );
-              ;
+                  body: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                    child: ListView(
+                      children: <Widget>[
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Please enter your name.',
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: kTextFieldDecoration.copyWith(
+                                  hintText: 'Enter your name',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Required' : null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _name = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 50,
+                              ),
+                              RoundedButton(
+                                colour: Colors.lightBlue,
+                                title: '⚡ Sign Me Up!',
+                                onPressed: () {
+                                  setState(() async {
+                                    if (_formKey.currentState.validate()) {
+                                      await userDbService.updateUserData(
+                                          email: widget.email,
+                                          name: _name,
+                                          isFaculty: true,
+                                          courseCode: 'FACULTY');
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return ChatScreen();
+                                        }),
+                                      );
+                                    } else {
+                                      _error =
+                                          '⛔ Opps... Something went wrong, try again later';
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(height: 12.0),
+                              Text(
+                                _error,
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: 14.0),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
             }
-          }
-        });
+          });
+    } else {
+      return FutureBuilder<bool>(
+          future: userDbService.doesUserExist(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return Loading();
+            } else {
+              if (snapshot.data == true) {
+                return ChatScreen();
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.lightBlue,
+                    elevation: 0.0,
+                    title: Text('🚀 Sign up NCI Fresh Start '),
+                  ),
+                  body: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                    child: ListView(
+                      children: <Widget>[
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Please enter your name and course details.',
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: kTextFieldDecoration.copyWith(
+                                  hintText: 'Enter your name',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Required' : null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _name = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                alignment: Alignment.bottomCenter,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Please select course: ',
+                                        style: TextStyle(fontSize: 14),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 150,
+                                      child: DropdownButtonFormField(
+                                        decoration: kTextFieldDecoration,
+                                        value: _courseCode,
+                                        icon: Icon(Icons.keyboard_arrow_down),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        style: TextStyle(color: Colors.black),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            _courseCode = newValue;
+                                          });
+                                        },
+                                        items: kCourseCode.map((courCode) {
+                                          return DropdownMenuItem(
+                                            value: courCode,
+                                            child: Text('$courCode'),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 50,
+                              ),
+                              RoundedButton(
+                                colour: Colors.lightBlue,
+                                title: '⚡ Sign Me Up!',
+                                onPressed: () {
+                                  setState(() async {
+                                    if (_formKey.currentState.validate()) {
+                                      await userDbService.updateUserData(
+                                          email: widget.email,
+                                          name: _name,
+                                          isFaculty: false,
+                                          courseCode: _courseCode);
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return ChatScreen();
+                                        }),
+                                      );
+                                    } else {
+                                      _error =
+                                          '⛔ Opps... Something went wrong, try again later';
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(height: 12.0),
+                              Text(
+                                _error,
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: 14.0),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+          });
+    }
   }
 }

@@ -5,27 +5,23 @@ import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 
 final _firestore = Firestore.instance;
-final key = encrypt.Key.fromLength(32);
-final iv = encrypt.IV.fromLength(16);
-final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
 User loggedInUser;
 UserData userData;
 UserDbService _userDbService;
 String courseCode;
 
-class ChatScreen extends StatefulWidget {
+class ClassUpdates extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ClassUpdatesState createState() => _ClassUpdatesState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final messageTextController = TextEditingController();
+class _ClassUpdatesState extends State<ClassUpdates> {
   final _authService = AuthService();
 
   String messageText;
@@ -71,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
-        title: Text('$courseCode Chat 🚀'),
+        title: Text('$courseCode Updates 🙋‍♀'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -80,53 +76,8 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             MessageStream(),
-            Container(
-              decoration: kMessageContainerDecoration,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: messageTextController,
-                      onChanged: (value) {
-                        //Do something with the user input.
-                        messageText = value;
-                      },
-                      decoration: kMessageTextFieldDecoration,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      messageTextController.clear();
-
-                      _firestore.collection('messages-$courseCode').add({
-                        'sentOn': DateTime.now(),
-                        'text': encrypter.encrypt(messageText, iv: iv).base64,
-                        'sender': loggedInUser.email,
-                        'isImage': false,
-                      });
-                    },
-                    child: Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return ImageUploadScreen();
-                        }),
-                      );
-                    },
-                    child: Text(
-                      '📸',
-                      style: kSendButtonTextStyle,
-                    ),
-                  )
-                ],
-              ),
+            SizedBox(
+              height: 100.0,
             ),
           ],
         ),
@@ -140,7 +91,7 @@ class MessageStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _firestore
-            .collection('messages-$courseCode')
+            .collection('updates-$courseCode')
             .orderBy('sentOn', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
@@ -156,16 +107,14 @@ class MessageStream extends StatelessWidget {
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
-            final messageImage = message.data['isImage'];
-            final userLoggedIn = loggedInUser.email;
-            final dateTime = message.data['sentOn'].toDate();
+            final sentOn = message.data['sentOn'].toDate();
 
             final messageBubble = MessageBubble(
               sender: messageSender,
-              text: encrypter.decrypt64(messageText, iv: iv),
-              isMe: messageSender == userLoggedIn,
-              isImage: messageImage,
-              dateTime: dateTime,
+              text: messageText,
+              isMe: false,
+              isImage: false,
+              dateTime: sentOn,
             );
 
             messageWidgets.add(messageBubble);

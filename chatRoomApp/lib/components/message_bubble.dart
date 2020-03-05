@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.isMe, this.isImage});
+  MessageBubble(
+      {this.sender, this.text, this.isMe, this.isImage, this.dateTime});
 
   final String sender;
   final String text;
   final bool isMe;
   final bool isImage;
+  final DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,16 @@ class MessageBubble extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20, top: 5),
+                      child: Text(
+                        '${dateTime.toString().substring(2, 16)}',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 Padding(
@@ -130,6 +142,16 @@ class MessageBubble extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 5),
+                      child: Text(
+                        '${dateTime.toString().substring(2, 16)}',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ],
