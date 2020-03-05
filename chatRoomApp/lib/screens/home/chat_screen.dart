@@ -1,5 +1,6 @@
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
+import 'package:flash_chat/screens/home/image_upload_screen.dart';
 import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
@@ -102,6 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'sentOn': DateTime.now(),
                         'text': encrypter.encrypt(messageText, iv: iv).base64,
                         'sender': loggedInUser.email,
+                        'isImage': false,
                       });
                     },
                     child: Text(
@@ -109,6 +111,20 @@ class _ChatScreenState extends State<ChatScreen> {
                       style: kSendButtonTextStyle,
                     ),
                   ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return ImageUploadScreen();
+                        }),
+                      );
+                    },
+                    child: Text(
+                      '📸',
+                      style: kSendButtonTextStyle,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -140,14 +156,17 @@ class MessageStream extends StatelessWidget {
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
+            final messageImage = message.data['isImage'];
             final userLoggedIn = loggedInUser.email;
-
+            print(
+                '&&isImage: $messageImage messageText: ${encrypter.decrypt64(messageText, iv: iv)}');
             if (messageSender == userLoggedIn) {}
 
             final messageBubble = MessageBubble(
               sender: messageSender,
               text: encrypter.decrypt64(messageText, iv: iv),
               isMe: messageSender == userLoggedIn,
+              isImage: messageImage,
             );
 
             messageWidgets.add(messageBubble);

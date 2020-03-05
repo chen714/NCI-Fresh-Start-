@@ -2,12 +2,7 @@ import 'package:flash_chat/screens/auth_screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
-import 'package:provider/provider.dart';
 import 'package:flash_chat/screens/auth_screens/registration_screen.dart';
-import 'package:flash_chat/models/user.dart';
-import 'package:flash_chat/screens/home/chat_screen.dart';
-import 'package:flash_chat/services/localAuthService.dart';
-import 'package:flash_chat/services/authService.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const id = 'welcome_screen';

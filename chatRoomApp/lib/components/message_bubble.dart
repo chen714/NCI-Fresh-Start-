@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.isMe});
+  MessageBubble({this.sender, this.text, this.isMe, this.isImage});
 
   final String sender;
   final String text;
   final bool isMe;
+  final bool isImage;
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +46,8 @@ class MessageBubble extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: SizedBox(
-                          width: text.length > 30 ?? false ? 200 : null,
-                          child: Text(
-                            '$text',
-                            softWrap: true,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
+                          width: text.length > 30 ? 200.0 : null,
+                          child: checkIsImage(),
                         ),
                       ),
                     ),
@@ -131,15 +125,8 @@ class MessageBubble extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: SizedBox(
-                          width: text.length > 30 ? 200 : null,
-                          child: Text(
-                            '$text',
-                            softWrap: true,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
+                          width: text.length > 30 ? 200.0 : null,
+                          child: checkIsImage(),
                         ),
                       ),
                     ),
@@ -148,5 +135,30 @@ class MessageBubble extends StatelessWidget {
               ],
             ),
           );
+  }
+
+//  double textLength() {
+//    if (isImage) {
+//      return null;
+//    } else {
+//      return ;
+//    }
+//  }
+
+  Widget checkIsImage() {
+    print(
+        '-------------------------------------------------------------isImage: $isImage');
+    if (isImage == true) {
+      return Image.network(text);
+    } else {
+      return Text(
+        '$text',
+        softWrap: true,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 15,
+        ),
+      );
+    }
   }
 }
