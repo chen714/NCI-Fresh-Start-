@@ -5,54 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-import 'package:flash_chat/services/UserDbService.dart';
-import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/screens/home/send_updates.dart';
 import 'package:flash_chat/screens/home/class_updates.dart';
 import 'package:flash_chat/screens/home/past_updates.dart';
 
-User loggedInUser;
-UserData userData;
-UserDbService _userDbService;
-bool isFaculty;
-
 class DrawerWidget extends StatefulWidget {
-  final String title;
-
-  DrawerWidget({Key key, this.title}) : super(key: key);
+  final UserData userData;
+  DrawerWidget({Key key, @required this.userData}) : super(key: key);
 
   @override
   _DrawerWidgetState createState() => _DrawerWidgetState();
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  final _authService = AuthService();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUserData();
-  }
-
-  void getCurrentUserData() async {
-    try {
-      final user = await _authService.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-        _userDbService = UserDbService(uid: loggedInUser.uid);
-        userData = await _userDbService.getUserDataFromUid();
-        setState(() {
-          isFaculty = userData.isFaculty;
-        });
-
-        print('----------------------------------$isFaculty');
-        print(loggedInUser.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);

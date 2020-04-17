@@ -1,4 +1,5 @@
 import 'package:flash_chat/components/drawer.dart';
+import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/home/image_upload_screen.dart';
 import 'package:flash_chat/services/UserDbService.dart';
@@ -109,13 +110,14 @@ class MessageStream extends StatelessWidget {
             final messageSender = message.data['sender'];
             final sentOn = message.data['sentOn'].toDate();
 
-            final messageBubble = MessageBubble(
+            final msg = Message(
               sender: messageSender,
               text: messageText,
               isMe: false,
               isImage: false,
               dateTime: sentOn,
             );
+            MessageBubble messageBubble = MessageBubble(msg: msg);
 
             messageWidgets.add(messageBubble);
           }

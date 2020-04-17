@@ -1,10 +1,12 @@
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
+import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
+import 'package:flash_chat/models/message.dart';
 
 final _firestore = Firestore.instance;
 
@@ -34,6 +36,7 @@ class _PastUpdatesState extends State<PastUpdates> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
+        //TODO: EMAIL DISPLAY NAME
         title: Text('${user.email}\'s Past Updates 🙋‍♀'),
         backgroundColor: Colors.lightBlueAccent,
       ),
@@ -58,7 +61,7 @@ class MessageStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _firestore
-            .collection('past updates-${userData.email}')
+            .collection('past updates-${user.email}')
             .orderBy('sentOn', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
@@ -76,13 +79,14 @@ class MessageStream extends StatelessWidget {
             final messageSender = message.data['courseCode'];
             final sentOn = message.data['sentOn'].toDate();
 
-            final messageBubble = MessageBubble(
+            final msg = Message(
               sender: messageSender,
               text: messageText,
               isMe: true,
               isImage: false,
               dateTime: sentOn,
             );
+            final messageBubble = MessageBubble(msg: msg);
 
             messageWidgets.add(messageBubble);
           }

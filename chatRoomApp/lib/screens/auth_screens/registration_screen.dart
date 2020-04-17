@@ -3,6 +3,7 @@ import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const id = 'registration_screen';
@@ -94,7 +95,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                               setState(() => _showSpinner = false);
                               if (result != null) {
-                                Navigator.pop(context);
+                                _showDialog(
+                                    context: context,
+                                    title: "Email Verification Required!",
+                                    content:
+                                        "Registration successful, please check your student mail for the email verification link. After email has been verified please proceed to login. ");
                               } else {
                                 setState(() {
                                   _error =
@@ -117,5 +122,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
           );
+  }
+
+  _showDialog({BuildContext context, String title, String content}) {
+    Alert(context: context, title: title, desc: content).show();
   }
 }

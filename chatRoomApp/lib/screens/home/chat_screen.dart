@@ -1,4 +1,5 @@
 import 'package:flash_chat/components/drawer.dart';
+import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/home/image_upload_screen.dart';
 import 'package:flash_chat/services/UserDbService.dart';
@@ -18,6 +19,7 @@ User loggedInUser;
 UserData userData;
 UserDbService _userDbService;
 String courseCode;
+bool isFaculty;
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -46,6 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
         userData = await _userDbService.getUserDataFromUid();
         setState(() {
           courseCode = userData.courseCode;
+          isFaculty = userData.isFaculty;
         });
 
         print('----------------------------------$courseCode');
@@ -59,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(userData: userData),
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
@@ -160,13 +163,15 @@ class MessageStream extends StatelessWidget {
             final userLoggedIn = loggedInUser.email;
             final dateTime = message.data['sentOn'].toDate();
 
-            final messageBubble = MessageBubble(
+            final Message msg = Message(
               sender: messageSender,
               text: encrypter.decrypt64(messageText, iv: iv),
               isMe: messageSender == userLoggedIn,
               isImage: messageImage,
               dateTime: dateTime,
             );
+
+            final MessageBubble messageBubble = MessageBubble(msg: msg);
 
             messageWidgets.add(messageBubble);
           }

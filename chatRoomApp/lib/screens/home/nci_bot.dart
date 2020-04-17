@@ -3,6 +3,7 @@ import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:flash_chat/models/message.dart';
 
 User user;
 
@@ -54,28 +55,31 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     Dialogflow dialogFlow =
         Dialogflow(authGoogle: authGoogle, language: Language.english);
     AIResponse response = await dialogFlow.detectIntent(query);
-    MessageBubble message = MessageBubble(
+    Message message = Message(
       text: response.getMessage() ??
           'Opps Something went wrong, try asking me a question again.',
       sender: "NCI Bot",
       isMe: false,
       dateTime: DateTime.now(),
     );
+    MessageBubble messageBubble = MessageBubble(msg: message);
     setState(() {
-      _messages.insert(0, message);
+      _messages.insert(0, messageBubble);
     });
   }
 
   void _submitQuery(String text) {
     _textController.clear();
-    MessageBubble message = new MessageBubble(
+
+    Message message = new Message(
       text: text,
       sender: user.email,
       isMe: true,
       dateTime: DateTime.now(),
     );
+    MessageBubble msgBubble = MessageBubble(msg: message);
     setState(() {
-      _messages.insert(0, message);
+      _messages.insert(0, msgBubble);
     });
     _dialogFlowResponse(text.replaceAll("'", "\\'"));
   }

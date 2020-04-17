@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flash_chat/shared/flutterToast.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FlutterToast toast = FlutterToast();
 
   //create user object based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -29,8 +31,24 @@ class AuthService {
           email: email, password: password);
       FirebaseUser fUser = result.user;
       //create new document for user with the uid
+      try {
+        await fUser.sendEmailVerification();
+        signOut();
+        toast.showToast(
+            message: "Registration successful",
+            toastColor: Colors.green,
+            textColor: Colors.black);
+        return _userFromFirebaseUser(fUser);
+      } catch (e) {
+        toast.showToast(
+            message:
+                "An error has occured while sending the verification email. Please try again later.",
+            toastColor: Colors.red,
+            textColor: Colors.white);
 
-      return _userFromFirebaseUser(fUser);
+        print(e.message);
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
@@ -43,7 +61,16 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser fUser = result.user;
-      return _userFromFirebaseUser(fUser);
+      if (fUser.isEmailVerified) {
+        return _userFromFirebaseUser(fUser);
+      } else {
+        fUser.sendEmailVerification();
+        signOut();
+        toast.showToast(
+            message: "Please ensure email is verified and try again.",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      }
     } catch (e) {
       print(e.toString());
       return null;
