@@ -1,6 +1,5 @@
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
@@ -45,7 +44,9 @@ class _PastUpdatesState extends State<PastUpdates> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MessageStream(),
+            MessageStream(
+              user: user,
+            ),
             SizedBox(
               height: 100.0,
             ),
@@ -57,6 +58,8 @@ class _PastUpdatesState extends State<PastUpdates> {
 }
 
 class MessageStream extends StatelessWidget {
+  User user;
+  MessageStream({this.user});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

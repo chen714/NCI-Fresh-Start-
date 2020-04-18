@@ -1,6 +1,8 @@
+import 'package:flash_chat/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flash_chat/models/message.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MessageBubble extends StatelessWidget {
   MessageBubble({@required this.msg});
@@ -171,7 +173,11 @@ class MessageBubble extends StatelessWidget {
     print(
         '-------------------------------------------------------------isImage: ${msg.isImage}');
     if (msg.isImage == true) {
-      return Image.network(msg.text);
+      return CachedNetworkImage(
+        imageUrl: msg.text,
+        placeholder: (context, url) => new Loading(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
+      );
     } else {
       return Text(
         '${msg.text}',
