@@ -79,11 +79,13 @@ class MessageStream extends StatelessWidget {
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
+            final messageSenderDisplayName = message.data['senderDisplayName'];
             final sentOn = message.data['sentOn'].toDate();
 
             final msg = Message(
               sender: messageSender,
               text: messageText,
+              senderDisplayName: messageSenderDisplayName,
               isMe: true,
               isImage: false,
               dateTime: sentOn,

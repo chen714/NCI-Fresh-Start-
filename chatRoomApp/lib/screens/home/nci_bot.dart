@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
@@ -8,9 +9,8 @@ import 'package:flash_chat/models/message.dart';
 User user;
 
 class NCIBotDialogFlow extends StatefulWidget {
-  NCIBotDialogFlow({Key key, this.title}) : super(key: key);
-
-  final String title;
+  NCIBotDialogFlow({Key key, this.userData}) : super(key: key);
+  final UserData userData;
 
   @override
   _NCIBotDialogFlowState createState() => new _NCIBotDialogFlowState();
@@ -58,7 +58,8 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     Message message = Message(
       text: response.getMessage() ??
           'Opps Something went wrong, try asking me a question again.',
-      sender: "NCI Bot",
+      sender: "virtualassistant@ncirl.ie",
+      senderDisplayName: 'NCI Help Desk',
       isMe: false,
       dateTime: DateTime.now(),
     );
@@ -74,6 +75,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     Message message = new Message(
       text: text,
       sender: user.email,
+      senderDisplayName: userData.name,
       isMe: true,
       dateTime: DateTime.now(),
     );

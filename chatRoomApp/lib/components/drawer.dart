@@ -25,14 +25,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       child: new ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(user.email),
+            accountName: Text('${userData.name} \n${userData.email}'),
             currentAccountPicture: GestureDetector(
               child: CircularProfileAvatar(
                 '',
                 radius: 25,
                 backgroundColor: Colors.indigo,
                 initialsText: Text(
-                  user.email[0],
+                  userData.name[0],
                   style: TextStyle(fontSize: 40, color: Colors.white),
                 ),
               ),

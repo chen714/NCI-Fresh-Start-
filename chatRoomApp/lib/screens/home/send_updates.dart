@@ -110,6 +110,7 @@ class _SendUpdateState extends State<SendUpdate> {
                       if (_formKey.currentState.validate()) {
                         Message message = Message(
                             sender: widget.userData.email,
+                            senderDisplayName: widget.userData.name,
                             text: _message,
                             isImage: false,
                             isMe: true,

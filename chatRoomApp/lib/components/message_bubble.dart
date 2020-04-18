@@ -29,7 +29,7 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: msg.sender == 'NCI Bot'
+            child: msg.sender == 'virtualassistant@ncirl.ie'
                 ? CircleAvatar(
                     maxRadius: 25,
                     backgroundImage: NetworkImage(
@@ -48,13 +48,7 @@ class MessageBubble extends StatelessWidget {
             crossAxisAlignment:
                 msg.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                msg.sender,
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black38,
-                ),
-              ),
+              senderName(),
               Material(
                 borderRadius: msg.isMe
                     ? BorderRadius.only(
@@ -105,13 +99,7 @@ class MessageBubble extends StatelessWidget {
             crossAxisAlignment:
                 msg.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                msg.sender,
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black38,
-                ),
-              ),
+              senderName(),
               Material(
                 borderRadius: msg.isMe
                     ? BorderRadius.only(
@@ -149,12 +137,7 @@ class MessageBubble extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: msg.sender == 'NCI Bot'
-                ? CircleAvatar(
-                    maxRadius: 25,
-                    backgroundImage: NetworkImage(
-                        "https://clipground.com/images/bot-clipart-8.jpg"))
-                : CircularProfileAvatar(
+            child:CircularProfileAvatar(
                     '',
                     radius: 25,
                     backgroundColor: msg.isMe ? Colors.indigo : Colors.blueGrey,
@@ -165,6 +148,16 @@ class MessageBubble extends StatelessWidget {
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget senderName(){
+    return Text(
+      '${msg.sender} - ${msg.senderDisplayName}',
+      style: TextStyle(
+        fontSize: 12.0,
+        color: Colors.black38,
       ),
     );
   }

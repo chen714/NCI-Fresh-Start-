@@ -90,6 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   text: encrypter
                                       .encrypt(messageText, iv: iv)
                                       .base64,
+                                  senderDisplayName: userData.name,
                                   isMe: true,
                                   dateTime: DateTime.now(),
                                   isImage: false);
@@ -148,6 +149,7 @@ class MessageStream extends StatelessWidget {
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
+            final senderDisplayName = message.data['senderDisplayName'];
             final messageImage = message.data['isImage'];
             final userLoggedIn = userData.email;
             final dateTime = message.data['sentOn'].toDate();
@@ -155,6 +157,7 @@ class MessageStream extends StatelessWidget {
             final Message msg = Message(
               sender: messageSender,
               text: encrypter.decrypt64(messageText, iv: iv),
+              senderDisplayName: senderDisplayName,
               isMe: messageSender == userLoggedIn,
               isImage: messageImage,
               dateTime: dateTime,

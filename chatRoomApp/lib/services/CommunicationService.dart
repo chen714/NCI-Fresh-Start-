@@ -17,6 +17,7 @@ class CommunicationService {
       'sentOn': message.dateTime,
       'text': message.text,
       'sender': message.sender,
+      'senderDisplayName': message.senderDisplayName,
       'isImage': message.isImage,
     }).catchError((onError) {
       print(onError);
@@ -59,6 +60,7 @@ class CommunicationService {
   Future<void> sendUpdateToCohort(Message message, String courseCode) async {
     _firestore.collection('updates-$courseCode').add({
       'sentOn': message.dateTime,
+      'senderDisplayName': message.senderDisplayName,
       'text': message.text,
       'sender': message.sender,
     }).catchError((onError) {
@@ -72,6 +74,7 @@ class CommunicationService {
     });
     _firestore.collection('past updates-${userData.email}').add({
       'sentOn': message.dateTime,
+      'senderDisplayName': message.senderDisplayName,
       'text': message.text,
       'sender': message.sender,
     }).catchError((onError) {
