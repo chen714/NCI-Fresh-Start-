@@ -61,16 +61,19 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser fUser = result.user;
-      if (fUser.isEmailVerified) {
-        return _userFromFirebaseUser(fUser);
-      } else {
-        fUser.sendEmailVerification();
-        signOut();
-        toast.showToast(
-            message: "Please ensure email is verified and try again.",
-            toastColor: Colors.red,
-            textColor: Colors.white);
-      }
+
+      //email verification check turned off
+//      if (fUser.isEmailVerified) {
+//        return _userFromFirebaseUser(fUser);
+//      } else {
+//        fUser.sendEmailVerification();
+//        signOut();
+//        toast.showToast(
+//            message: "Please ensure email is verified and try again.",
+//            toastColor: Colors.red,
+//            textColor: Colors.white);
+//      }
+      return _userFromFirebaseUser(fUser);
     } catch (e) {
       print(e.toString());
       return null;

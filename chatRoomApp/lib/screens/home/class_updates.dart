@@ -1,23 +1,21 @@
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:flash_chat/screens/home/image_upload_screen.dart';
-import 'package:flash_chat/services/UserDbService.dart';
+import 'package:flash_chat/screens/home/chat_screen.dart';
+
 import 'package:flash_chat/services/authService.dart';
+import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 
-final _firestore = Firestore.instance;
-
-User loggedInUser;
-UserData userData;
-UserDbService _userDbService;
-String courseCode;
+CommunicationService chatService;
 
 class ClassUpdates extends StatefulWidget {
+  ClassUpdates({this.userData});
+  UserData userData;
   @override
   _ClassUpdatesState createState() => _ClassUpdatesState();
 }
@@ -28,35 +26,11 @@ class _ClassUpdatesState extends State<ClassUpdates> {
   String messageText;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUserData();
-  }
-
-  void getCurrentUserData() async {
-    try {
-      final user = await _authService.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-        _userDbService = UserDbService(uid: loggedInUser.uid);
-        userData = await _userDbService.getUserDataFromUid();
-        setState(() {
-          courseCode = userData.courseCode;
-        });
-
-        print('----------------------------------$courseCode');
-        print(loggedInUser.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(
+        userData: userData,
+      ),
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
@@ -68,7 +42,7 @@ class _ClassUpdatesState extends State<ClassUpdates> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
-        title: Text('$courseCode Updates 🙋‍♀'),
+        title: Text('${widget.userData.courseCode} Updates 🙋‍♀'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -76,7 +50,9 @@ class _ClassUpdatesState extends State<ClassUpdates> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MessageStream(),
+            MessageStream(
+              userData: widget.userData,
+            ),
             SizedBox(
               height: 100.0,
             ),
@@ -88,13 +64,14 @@ class _ClassUpdatesState extends State<ClassUpdates> {
 }
 
 class MessageStream extends StatelessWidget {
+  final UserData userData;
+  MessageStream({this.userData});
   @override
   Widget build(BuildContext context) {
+    CommunicationService commsService =
+        CommunicationService(userData: userData);
     return StreamBuilder<QuerySnapshot>(
-        stream: _firestore
-            .collection('updates-$courseCode')
-            .orderBy('sentOn', descending: false)
-            .snapshots(),
+        stream: commsService.classUpdates,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(

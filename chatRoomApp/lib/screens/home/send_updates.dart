@@ -1,42 +1,18 @@
+import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:flash_chat/services/UserDbService.dart';
+import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flash_chat/services/authService.dart';
-
-final _firestore = Firestore.instance;
 
 class SendUpdate extends StatefulWidget {
+  final UserData userData;
+  SendUpdate({this.userData});
   @override
   _SendUpdateState createState() => _SendUpdateState();
 }
 
 class _SendUpdateState extends State<SendUpdate> {
-  final _authService = AuthService();
-  UserData userData;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUserData();
-  }
-
-  void getCurrentUserData() async {
-    try {
-      final user = await _authService.currentUser();
-      if (user != null) {
-        User loggedInUser = user;
-        UserDbService _userDbService = UserDbService(uid: loggedInUser.uid);
-        userData = await _userDbService.getUserDataFromUid();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   //state
   final _formKey = GlobalKey<FormState>();
 
@@ -47,6 +23,8 @@ class _SendUpdateState extends State<SendUpdate> {
 
   @override
   Widget build(BuildContext context) {
+    CommunicationService commsService =
+        CommunicationService(userData: widget.userData);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
@@ -130,18 +108,13 @@ class _SendUpdateState extends State<SendUpdate> {
                     title: '⚡ Send Update to ${_courseCode ?? '...'}',
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _firestore.collection('updates-$_courseCode').add({
-                          'sentOn': DateTime.now(),
-                          'text': _message,
-                          'sender': userData.email,
-                        });
-                        _firestore
-                            .collection('past updates-${userData.email}')
-                            .add({
-                          'sentOn': DateTime.now(),
-                          'text': _message,
-                          'courseCode': _courseCode,
-                        });
+                        Message message = Message(
+                            sender: widget.userData.email,
+                            text: _message,
+                            isImage: false,
+                            isMe: true,
+                            dateTime: DateTime.now());
+                        commsService.sendUpdateToCohort(message, _courseCode);
                         Navigator.pop(context);
                       } else {
                         _error =

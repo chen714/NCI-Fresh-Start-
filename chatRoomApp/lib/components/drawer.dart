@@ -49,7 +49,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               );
             },
             child: ListTile(
-              title: Text(isFaculty ? 'Faculty Chat' : 'Class Chat'),
+              title: Text(userData.isFaculty ? 'Faculty Chat' : 'Class Chat'),
               leading: Icon(Icons.message),
             ),
           ),
@@ -91,27 +91,32 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  if (isFaculty) {
-                    return SendUpdate();
+                  if (userData.isFaculty) {
+                    return SendUpdate(
+                      userData: userData,
+                    );
                   } else {
-                    return ClassUpdates();
+                    return ClassUpdates(userData: userData);
                   }
                 }),
               );
             },
             child: ListTile(
-              title: Text(isFaculty ? 'Send Class Update' : 'Class Updates'),
-              leading: Icon(isFaculty ? Icons.send : Icons.grade),
+              title: Text(
+                  userData.isFaculty ? 'Send Class Update' : 'Class Updates'),
+              leading: Icon(userData.isFaculty ? Icons.send : Icons.grade),
             ),
           ),
           Divider(),
-          isFaculty
+          userData.isFaculty
               ? InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return PastUpdates();
+                        return PastUpdates(
+                          userData: userData,
+                        );
                       }),
                     );
                   },
