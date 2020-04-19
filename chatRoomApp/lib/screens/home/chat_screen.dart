@@ -1,3 +1,4 @@
+import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
@@ -12,6 +13,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 final _firestore = Firestore.instance;
 final key = encrypt.Key.fromLength(32);
@@ -26,6 +28,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  @override
   final messageTextController = TextEditingController();
   final _authService = AuthService();
 
@@ -42,7 +45,9 @@ class _ChatScreenState extends State<ChatScreen> {
             return Loading();
           } else {
             userData = snapshot.data;
-            CommunicationService commsService = CommunicationService(userData: userData);
+            CommunicationService commsService =
+                CommunicationService(userData: userData);
+
             return Scaffold(
               drawer: DrawerWidget(userData: userData),
               appBar: AppBar(
@@ -133,7 +138,8 @@ class MessageStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CommunicationService commsService = CommunicationService(userData: userData);
+    CommunicationService commsService =
+        CommunicationService(userData: userData);
     return StreamBuilder<QuerySnapshot>(
         stream: commsService.chatMessages,
         builder: (context, snapshot) {

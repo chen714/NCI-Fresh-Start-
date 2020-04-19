@@ -1,9 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class SendUpdate extends StatefulWidget {
   final UserData userData;
@@ -116,6 +120,7 @@ class _SendUpdateState extends State<SendUpdate> {
                             isMe: true,
                             dateTime: DateTime.now());
                         commsService.sendUpdateToCohort(message, _courseCode);
+
                         Navigator.pop(context);
                       } else {
                         _error =

@@ -71,6 +71,21 @@ class CommunicationService {
           toastColor: Colors.red,
           textColor: Colors.black);
       return;
+    }).whenComplete(() {
+      _firestore.collection('notificationUpdates').add({
+        'sender': message.sender,
+        'courseCode': courseCode,
+        'message': message.text,
+        'senderName': message.senderDisplayName
+      });
+    }).catchError((onError) {
+      print(onError);
+      toast.showToast(
+          message:
+              'Something went wrong while sending your class update. Try again later.',
+          toastColor: Colors.red,
+          textColor: Colors.black);
+      return;
     });
     _firestore.collection('past updates-${userData.email}').add({
       'sentOn': message.dateTime,
