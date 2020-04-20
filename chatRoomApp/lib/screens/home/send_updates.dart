@@ -1,13 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
+import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class SendUpdate extends StatefulWidget {
   final UserData userData;
@@ -19,6 +18,7 @@ class SendUpdate extends StatefulWidget {
 class _SendUpdateState extends State<SendUpdate> {
   //state
   final _formKey = GlobalKey<FormState>();
+  AuthService _authService = AuthService();
 
   //form value
   String _message;
@@ -34,6 +34,15 @@ class _SendUpdateState extends State<SendUpdate> {
         backgroundColor: Colors.lightBlue,
         elevation: 0.0,
         title: Text('🚀 Send Updates To your Class'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                //Implement logout functionality
+                _authService.signOut();
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              }),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -51,6 +60,7 @@ class _SendUpdateState extends State<SendUpdate> {
                     height: 20,
                   ),
                   TextFormField(
+                    maxLines: 6,
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your update',
                     ),
@@ -119,9 +129,7 @@ class _SendUpdateState extends State<SendUpdate> {
                             isImage: false,
                             isMe: true,
                             dateTime: DateTime.now());
-                        commsService.sendUpdateToCohort(message, _courseCode);
-
-                        Navigator.pop(context);
+                        _showConfirmationDialog(message, commsService);
                       } else {
                         _error =
                             '⛔ Opps... Something went wrong, try again later';
@@ -140,5 +148,52 @@ class _SendUpdateState extends State<SendUpdate> {
         ),
       ),
     );
+  }
+
+  _showConfirmationDialog(Message message, CommunicationService commsService) {
+    Alert(
+      context: context,
+      type: AlertType.info,
+      title: "Your update to $_courseCode",
+      desc: message.text,
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Send",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            commsService
+                .sendUpdateToCohort(message, _courseCode)
+                .whenComplete(() {
+              showSimpleNotification(
+                Text("Update Sent!"),
+                background: Colors.green,
+              );
+            }).catchError((e) {
+              showSimpleNotification(
+                Text(
+                    "An error occured while sending your update, Please try again later. "),
+                background: Colors.red,
+              );
+            });
+            _formKey.currentState.reset();
+            Navigator.pop(context);
+          },
+          gradient: LinearGradient(colors: [
+            Color.fromRGBO(116, 116, 191, 1.0),
+            Color.fromRGBO(52, 138, 199, 1.0)
+          ]),
+        ),
+        DialogButton(
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Colors.red[300],
+        ),
+      ],
+    ).show();
   }
 }

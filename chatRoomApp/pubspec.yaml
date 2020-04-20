@@ -27,6 +27,8 @@ dependencies:
   rflutter_alert: ^1.0.3
   cached_network_image: ^2.1.0+1
   firebase_messaging: ^5.0.2
+  overlay_support: ^1.0.3
+
 
 dev_dependencies:
   flutter_test:

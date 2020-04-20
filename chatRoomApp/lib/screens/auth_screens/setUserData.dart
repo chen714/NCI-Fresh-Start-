@@ -1,10 +1,13 @@
 import 'package:flash_chat/components/RoundedButton.dart';
+import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
+import 'package:flash_chat/screens/home/class_updates.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class SetUserData extends StatefulWidget {
   final String uid;
@@ -16,6 +19,7 @@ class SetUserData extends StatefulWidget {
 }
 
 class _SetUserDataState extends State<SetUserData> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FirebaseMessaging _fcm = FirebaseMessaging();
   void initState() {
     // TODO: implement initState
@@ -23,29 +27,62 @@ class _SetUserDataState extends State<SetUserData> {
 
     _fcm.configure(onMessage: (Map<String, dynamic> message) async {
       print("onMessage: $message");
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: ListTile(
-            title: Text(message['notification']['title']),
-            subtitle: Text(message['notification']['body']),
-          ),
-          actions: <Widget>[
-            RoundedButton(
-              title: 'Ok',
-              colour: Colors.pink,
-              bold: true,
-              onPressed: () => Navigator.of(context).pop(),
+      UserData userData =
+          await UserDbService(uid: widget.uid).getUserDataFromUid();
+      showOverlayNotification((context) {
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: ListTile(
+              leading: SizedBox.fromSize(
+                size: const Size(40, 40),
+                child: Image.asset('images/notify.png'),
+              ),
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+              trailing: IconButton(
+                  icon: Icon(Icons.info),
+                  onPressed: () {
+                    OverlaySupportEntry.of(context).dismiss();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ClassUpdates(
+                          userData: userData,
+                        );
+                      }),
+                    );
+                  }),
             ),
-          ],
-        ),
-      );
+          ),
+        );
+      }, duration: Duration(milliseconds: 10000));
     }, onLaunch: (Map<String, dynamic> message) async {
       print("onLaunch: $message");
       // TODO optional
+      UserData userData =
+          await UserDbService(uid: widget.uid).getUserDataFromUid();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return ClassUpdates(
+            userData: userData,
+          );
+        }),
+      );
     }, onResume: (Map<String, dynamic> message) async {
       print("onResume: $message");
       // TODO optional
+      UserData userData =
+          await UserDbService(uid: widget.uid).getUserDataFromUid();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return ClassUpdates(
+            userData: userData,
+          );
+        }),
+      );
     });
   }
 
@@ -135,6 +172,7 @@ class _SetUserDataState extends State<SetUserData> {
               return ChatScreen();
             } else {
               return Scaffold(
+                key: _scaffoldKey,
                 appBar: AppBar(
                   backgroundColor: Colors.lightBlue,
                   elevation: 0.0,

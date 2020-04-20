@@ -115,6 +115,15 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
           'Upload an Image - $courseCode 🎈',
         ),
         backgroundColor: Colors.lightBlueAccent,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                //Implement logout functionality
+                _authService.signOut();
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              }),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.lightBlue,

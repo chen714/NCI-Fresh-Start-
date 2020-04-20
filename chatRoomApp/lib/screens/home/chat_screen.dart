@@ -73,21 +73,24 @@ class _ChatScreenState extends State<ChatScreen> {
                       userData: userData,
                     ),
                     Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 10, left: 8),
                       decoration: kMessageContainerDecoration,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              minLines: 1,
+                              maxLines: 8,
                               controller: messageTextController,
                               onChanged: (value) {
                                 //Do something with the user input.
                                 messageText = value;
                               },
-                              decoration: kMessageTextFieldDecoration,
+                              decoration: kTextFieldDecoration,
                             ),
                           ),
-                          FlatButton(
+                          IconButton(
                             onPressed: () {
                               messageTextController.clear();
                               Message message = Message(
@@ -101,12 +104,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                   isImage: false);
                               commsService.sendMessage(message);
                             },
-                            child: Text(
-                              'Send',
-                              style: kSendButtonTextStyle,
-                            ),
+                            icon: Icon(Icons.send),
                           ),
-                          FlatButton(
+                          IconButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -115,10 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 }),
                               );
                             },
-                            child: Text(
-                              '📸',
-                              style: kSendButtonTextStyle,
-                            ),
+                            icon: Icon(Icons.camera_enhance),
                           )
                         ],
                       ),

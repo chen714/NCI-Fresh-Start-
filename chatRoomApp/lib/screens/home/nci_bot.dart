@@ -1,4 +1,6 @@
+import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
+import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
@@ -19,20 +21,22 @@ class NCIBotDialogFlow extends StatefulWidget {
 class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
   final List<MessageBubble> _messages = <MessageBubble>[];
   final TextEditingController _textController = new TextEditingController();
+  AuthService _authService = AuthService();
 
   Widget _queryInputWidget(BuildContext context) {
     user = Provider.of<User>(context);
     return Container(
+      decoration: kMessageContainerDecoration,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Row(
           children: <Widget>[
             Flexible(
               child: TextField(
+                minLines: 1,
+                maxLines: 3,
                 controller: _textController,
-                onSubmitted: _submitQuery,
-                decoration:
-                    InputDecoration.collapsed(hintText: "Send a message"),
+                decoration: kTextFieldDecoration,
               ),
             ),
             Container(
@@ -91,7 +95,17 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("NCI-BOT"),
+        title: Text("NCI Virtual Assistant"),
+        backgroundColor: Colors.lightBlueAccent,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                //Implement logout functionality
+                _authService.signOut();
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              }),
+        ],
       ),
       body: Column(children: <Widget>[
         Flexible(

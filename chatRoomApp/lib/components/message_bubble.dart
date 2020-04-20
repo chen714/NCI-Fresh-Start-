@@ -30,17 +30,25 @@ class MessageBubble extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: msg.sender == 'virtualassistant@ncirl.ie'
-                ? CircleAvatar(
-                    maxRadius: 25,
-                    backgroundImage: NetworkImage(
-                        "https://clipground.com/images/bot-clipart-8.jpg"))
-                : CircularProfileAvatar(
-                    '',
-                    radius: 25,
-                    backgroundColor: msg.isMe ? Colors.indigo : Colors.blueGrey,
-                    initialsText: Text(
-                      msg.sender[0],
-                      style: TextStyle(fontSize: 40, color: Colors.white),
+                ? Material(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    elevation: 10,
+                    child: CircleAvatar(
+                        maxRadius: 25,
+                        backgroundImage: AssetImage('images/bot.png')),
+                  )
+                : Material(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    elevation: 10,
+                    child: CircularProfileAvatar(
+                      '',
+                      radius: 25,
+                      backgroundColor:
+                          msg.isMe ? Colors.indigo : Colors.blueGrey,
+                      initialsText: Text(
+                        msg.sender[0],
+                        style: TextStyle(fontSize: 40, color: Colors.white),
+                      ),
                     ),
                   ),
           ),
@@ -137,22 +145,26 @@ class MessageBubble extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child:CircularProfileAvatar(
-                    '',
-                    radius: 25,
-                    backgroundColor: msg.isMe ? Colors.indigo : Colors.blueGrey,
-                    initialsText: Text(
-                      msg.sender[0],
-                      style: TextStyle(fontSize: 40, color: Colors.white),
-                    ),
-                  ),
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              elevation: 10,
+              child: CircularProfileAvatar(
+                '',
+                radius: 25,
+                backgroundColor: msg.isMe ? Colors.indigo : Colors.blueGrey,
+                initialsText: Text(
+                  msg.sender[0],
+                  style: TextStyle(fontSize: 40, color: Colors.white),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget senderName(){
+  Widget senderName() {
     return Text(
       '${msg.sender} - ${msg.senderDisplayName}',
       style: TextStyle(
