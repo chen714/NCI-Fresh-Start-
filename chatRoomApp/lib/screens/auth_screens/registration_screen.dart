@@ -1,5 +1,6 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
@@ -28,9 +29,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return _showSpinner
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.lightBlueAccent[10],
             appBar: AppBar(
-              backgroundColor: Colors.lightBlue,
+              backgroundColor: kPrimaryColourDark,
               elevation: 0.0,
               title: Text('🚀 Sign up NCI Fresh Start '),
             ),
@@ -84,7 +84,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         SizedBox(height: 20.0),
                         RoundedButton(
-                          colour: Colors.lightBlue,
+                          colour: kPrimaryColour,
                           title: '🔥 Register',
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {

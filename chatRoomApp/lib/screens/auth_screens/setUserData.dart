@@ -1,11 +1,13 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
+import 'package:flash_chat/constants/courseCode.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/screens/home/class_updates.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:flash_chat/services/UserDbService.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -174,7 +176,7 @@ class _SetUserDataState extends State<SetUserData> {
               return Scaffold(
                 key: _scaffoldKey,
                 appBar: AppBar(
-                  backgroundColor: Colors.lightBlue,
+                  backgroundColor: kPrimaryColourDark,
                   elevation: 0.0,
                   title: Text('🚀 Sign up NCI Fresh Start '),
                 ),
@@ -214,7 +216,7 @@ class _SetUserDataState extends State<SetUserData> {
                               height: 50,
                             ),
                             RoundedButton(
-                              colour: Colors.lightBlue,
+                              colour: kPrimaryColour,
                               title: '⚡ Sign Me Up!',
                               onPressed: () {
                                 setState(() async {

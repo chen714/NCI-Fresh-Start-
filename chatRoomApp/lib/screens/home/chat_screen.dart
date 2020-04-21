@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/message.dart';
@@ -8,7 +9,7 @@ import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
@@ -62,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       }),
                 ],
                 title: Text('${userData.courseCode} Chat 🚀'),
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: kPrimaryColourDark,
               ),
               body: SafeArea(
                 child: Column(
@@ -143,7 +144,7 @@ class MessageStream extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: kPrimaryColourDark,
               ),
             );
           }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/authService.dart';
@@ -114,7 +115,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
         title: Text(
           'Upload an Image - $courseCode 🎈',
         ),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColourDark,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
@@ -126,7 +127,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.lightBlue,
+        color: kPrimaryColour,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
           child: Row(
@@ -191,7 +192,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
               SizedBox(
                 width: 100.0,
                 child: RoundedButton(
-                  colour: Colors.lightBlue,
+                  colour: kPrimaryColourLight,
                   title: "🚫",
                   bold: true,
                   onPressed: () {
@@ -202,7 +203,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
               SizedBox(
                 width: 100.0,
                 child: RoundedButton(
-                  colour: Colors.lightBlue,
+                  colour: kPrimaryColourLight,
                   title: "📤",
                   bold: true,
                   onPressed: () {

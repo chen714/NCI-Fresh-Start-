@@ -1,9 +1,11 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
+import 'package:flash_chat/constants/courseCode.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -31,7 +33,7 @@ class _SendUpdateState extends State<SendUpdate> {
         CommunicationService(userData: widget.userData);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: kPrimaryColourDark,
         elevation: 0.0,
         title: Text('🚀 Send Updates To your Class'),
         actions: <Widget>[
@@ -118,7 +120,7 @@ class _SendUpdateState extends State<SendUpdate> {
                     height: 50,
                   ),
                   RoundedButton(
-                    colour: Colors.lightBlue,
+                    colour: kPrimaryColourLight,
                     title: '⚡ Send Update to ${_courseCode ?? '...'}',
                     onPressed: () {
                       if (_formKey.currentState.validate()) {

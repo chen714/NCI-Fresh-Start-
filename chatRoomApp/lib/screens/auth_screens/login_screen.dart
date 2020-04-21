@@ -1,5 +1,7 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
+import 'package:flash_chat/screens/auth_screens/password_reset_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
@@ -25,9 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return _showSpinner
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.lightBlueAccent[10],
             appBar: AppBar(
-              backgroundColor: Colors.lightBlue,
+              backgroundColor: kPrimaryColourDark,
               elevation: 0.0,
               title: Text('🚀 Sign in NCI Fresh Start '),
             ),
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 20.0),
                         RoundedButton(
-                          colour: Colors.pink[400],
+                          colour: kSecondaryColor,
                           title: '💎  Log In',
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
@@ -92,6 +93,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               }
                             }
+                          },
+                        ),
+                        SizedBox(height: 12.0),
+                        FlatButton(
+                          child: Text(
+                            'Forget Password?',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: kPrimaryColourLight),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return ResetPassword();
+                              }),
+                            );
                           },
                         ),
                         SizedBox(height: 12.0),

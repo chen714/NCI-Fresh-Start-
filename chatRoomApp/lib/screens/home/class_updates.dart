@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
@@ -6,7 +7,7 @@ import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/constants.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
@@ -43,7 +44,7 @@ class _ClassUpdatesState extends State<ClassUpdates> {
               }),
         ],
         title: Text('${widget.userData.courseCode} Updates 🙋‍♀'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColourDark,
       ),
       body: SafeArea(
         child: Column(
@@ -76,7 +77,7 @@ class MessageStream extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: kPrimaryColourDark,
               ),
             );
           }

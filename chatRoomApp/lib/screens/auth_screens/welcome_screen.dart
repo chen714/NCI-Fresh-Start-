@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/screens/auth_screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -63,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 60.0,
             ),
             ColorizeAnimatedTextKit(
-              text: ['NCI Fresh Start'],
+              text: ['$institutionName Fresh Start'],
               alignment: Alignment.center,
               textStyle: TextStyle(
                 fontSize: 35.0,
@@ -80,7 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             RoundedButton(
               title: 'Log In',
-              colour: Colors.lightBlueAccent,
+              colour: kPrimaryColourLight,
               onPressed: () {
                 //Go to login screen.
                 Navigator.push(
@@ -93,7 +94,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             RoundedButton(
               title: 'Sign Up',
-              colour: Colors.blueAccent,
+              colour: kPrimaryColour,
               onPressed: () {
                 //Go to registration screen.
 

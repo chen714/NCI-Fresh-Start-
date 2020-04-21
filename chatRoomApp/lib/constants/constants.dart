@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flutter/material.dart';
 
 const kMessageTextFieldDecoration = InputDecoration(
@@ -5,8 +6,6 @@ const kMessageTextFieldDecoration = InputDecoration(
   hintText: 'Type your message here...',
   border: InputBorder.none,
 );
-
-final List<String> kCourseCode = ['BSHC1', 'BSHC2', 'BSHC3', 'BSHC4'];
 
 const kMessageContainerDecoration = BoxDecoration(
   border: Border(
@@ -20,11 +19,11 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+    borderSide: BorderSide(color: kPrimaryColourLight, width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+    borderSide: BorderSide(color: kPrimaryColourLight, width: 2.0),
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );

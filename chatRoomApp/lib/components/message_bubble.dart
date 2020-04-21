@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
@@ -70,7 +71,7 @@ class MessageBubble extends StatelessWidget {
                         bottomRight: Radius.circular(30.0),
                       ),
                 elevation: 10.0,
-                color: msg.isMe ? Colors.lightBlueAccent : Colors.pinkAccent,
+                color: kSecondaryColor,
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -121,7 +122,7 @@ class MessageBubble extends StatelessWidget {
                         bottomRight: Radius.circular(30.0),
                       ),
                 elevation: 10.0,
-                color: msg.isMe ? Colors.lightBlueAccent : Colors.pinkAccent,
+                color: kPrimaryColour,
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

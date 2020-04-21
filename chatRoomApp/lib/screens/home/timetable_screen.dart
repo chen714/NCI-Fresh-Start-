@@ -1,4 +1,5 @@
 import 'package:easy_web_view/easy_web_view.dart';
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               }),
         ],
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColourDark,
       ),
       body: EasyWebView(
         src: url,

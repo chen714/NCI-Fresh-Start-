@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:flash_chat/screens/home/timetable_screen.dart';
@@ -30,14 +31,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: CircularProfileAvatar(
                 '',
                 radius: 25,
-                backgroundColor: Colors.indigo,
+                backgroundColor: kPrimaryColourDark,
                 initialsText: Text(
                   userData.name[0],
                   style: TextStyle(fontSize: 40, color: Colors.white),
                 ),
               ),
             ),
-            decoration: BoxDecoration(color: Colors.lightBlueAccent),
+            decoration: BoxDecoration(color: kPrimaryColourLight),
           ),
           InkWell(
             onTap: () {

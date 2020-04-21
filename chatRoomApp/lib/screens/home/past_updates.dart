@@ -1,3 +1,4 @@
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
@@ -37,7 +38,7 @@ class _PastUpdatesState extends State<PastUpdates> {
               }),
         ],
         title: Text('${widget.userData.name}\'s \nPast Updates 🙋‍♀'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColourDark,
       ),
       body: SafeArea(
         child: Column(
@@ -70,7 +71,7 @@ class MessageStream extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: kPrimaryColourDark,
               ),
             );
           }

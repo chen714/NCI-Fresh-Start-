@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/shared/flutterToast.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,6 +23,10 @@ class AuthService {
     return _auth.onAuthStateChanged
         //.map((FirebaseUser user) => _userFromFirebaseUser(user)); -- the same as the below line
         .map(_userFromFirebaseUser);
+  }
+
+  Future<void> resetPassword(String email) {
+    return _auth.sendPasswordResetEmail(email: email);
   }
 
   //register with email and password

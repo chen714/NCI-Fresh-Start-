@@ -1,4 +1,5 @@
-import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/constants/colorAndDesignConstants.dart';
+import 'package:flash_chat/constants/constants.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,7 @@ class _NCIBotDialogFlowState extends State<NCIBotDialogFlow> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("NCI Virtual Assistant"),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColourDark,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
