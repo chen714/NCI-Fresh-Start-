@@ -4,6 +4,7 @@ import 'package:flash_chat/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
+import 'package:password_compromised/password_compromised.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -88,24 +89,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           title: '🔥 Register',
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              setState(() => _showSpinner = true);
-                              dynamic result =
-                                  await _auth.registerWithEmailAndPassword(
-                                      _email.replaceAll(' ', ''), _password);
-
-                              setState(() => _showSpinner = false);
-                              if (result != null) {
+                              if (await isPasswordCompromised(_password)) {
                                 _showDialog(
                                     context: context,
-                                    title: "Email Verification Required!",
+                                    title: 'Password Compromised!',
                                     content:
-                                        "Registration successful, please check your student mail for the email verification link. After email has been verified please proceed to login. ");
+                                        'The password that you have choosen have appeared on pwned password databases meaning that its insecure and can be easily compromised, please change account password to something else.');
                               } else {
-                                setState(() {
-                                  _error =
-                                      '⛔ Opps... Something went wrong, try again later';
-                                  _showSpinner = false;
-                                });
+                                setState(() => _showSpinner = true);
+                                dynamic result =
+                                    await _auth.registerWithEmailAndPassword(
+                                        _email.replaceAll(' ', ''), _password);
+
+                                setState(() => _showSpinner = false);
+                                if (result != null) {
+                                  _showDialog(
+                                      context: context,
+                                      title: "Email Verification Required!",
+                                      content:
+                                          "Registration successful, please check your student mail for the email verification link. After email has been verified please proceed to login. ");
+                                } else {
+                                  setState(() {
+                                    _error =
+                                        '⛔ Opps... Something went wrong, try again later';
+                                    _showSpinner = false;
+                                  });
+                                }
                               }
                             }
                           },
