@@ -14,7 +14,9 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 final _firestore = Firestore.instance;
 final key = encrypt.Key.fromLength(32);
@@ -149,9 +151,10 @@ class MessageStream extends StatelessWidget {
             );
           }
           final messages = snapshot.data.documents.reversed;
-          List<MessageBubble> messageWidgets = [];
+          List<GestureDetector> messageWidgets = [];
           for (var message in messages) {
-            final messageText = message.data['text'];
+            final messageText =
+                encrypter.decrypt64(message.data['text'], iv: iv);
             final messageSender = message.data['sender'];
             final senderDisplayName = message.data['senderDisplayName'];
             final messageImage = message.data['isImage'];
@@ -160,7 +163,7 @@ class MessageStream extends StatelessWidget {
 
             final Message msg = Message(
               sender: messageSender,
-              text: encrypter.decrypt64(messageText, iv: iv),
+              text: messageText,
               senderDisplayName: senderDisplayName,
               isMe: messageSender == userLoggedIn,
               isImage: messageImage,
@@ -168,8 +171,86 @@ class MessageStream extends StatelessWidget {
             );
 
             final MessageBubble messageBubble = MessageBubble(msg: msg);
+            final GestureDetector messageGestureDetector = GestureDetector(
+              child: messageBubble,
+              onLongPress: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: Container(
+                              color: Color(0xFF737373),
+                              child: Container(
+                                padding: EdgeInsets.all(20.0),
+                                decoration: BoxDecoration(
+                                  color:
+                                      ThemeData.dark().scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                child: SizedBox(
+                                  width: 300,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 120,
+                                        child: RoundedButton(
+                                            title: 'Copy Text 📋',
+                                            colour: kPrimaryColourLight,
+                                            onPressed: () {
+                                              Clipboard.setData(
+                                                      new ClipboardData(
+                                                          text: messageText))
+                                                  .whenComplete(() {
+                                                showSimpleNotification(
+                                                  Text(
+                                                      "Message copied to clipboard."),
+                                                  background: Colors.green,
+                                                );
+                                              }).catchError((e) {
+                                                showSimpleNotification(
+                                                  Text(
+                                                      "Opps.. Something went wrong please try again."),
+                                                  background: Colors.red,
+                                                );
+                                              });
+                                            }),
+                                      ),
+                                      Visibility(
+                                        visible: messageSender == userLoggedIn,
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: RoundedButton(
+                                              title: 'Delete ✖',
+                                              colour: kSecondaryColorLight,
+                                              onPressed: () {
+                                                _showConfirmationDialog(
+                                                    dateTime,
+                                                    commsService,
+                                                    context,
+                                                    messageText);
+                                              }),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ));
+              },
+            );
 
-            messageWidgets.add(messageBubble);
+            messageWidgets.add(messageGestureDetector);
           }
           return Expanded(
             child: ListView(
@@ -179,5 +260,58 @@ class MessageStream extends StatelessWidget {
             ),
           );
         });
+  }
+
+  _showConfirmationDialog(DateTime sentOn, CommunicationService commsService,
+      BuildContext context, String originalMessage) {
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Your about to delete your message: ",
+      desc: originalMessage,
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Delete",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            commsService
+                .deleteMessage(
+                    sentOn,
+                    encrypter
+                        .encrypt('Message deleted by sender.', iv: iv)
+                        .base64)
+                .whenComplete(() {
+              showSimpleNotification(
+                Text("Message deleted!"),
+                background: Colors.green,
+              );
+            }).catchError((e) {
+              print(e);
+              showSimpleNotification(
+                Text(
+                    "An error occured while deleteing your message, Please try again later. "),
+                background: Colors.red,
+              );
+            });
+
+            Navigator.pop(context);
+          },
+          color: Colors.red[300],
+        ),
+        DialogButton(
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          gradient: LinearGradient(colors: [
+            Color.fromRGBO(116, 116, 191, 1.0),
+            Color.fromRGBO(52, 138, 199, 1.0)
+          ]),
+        ),
+      ],
+    ).show();
   }
 }

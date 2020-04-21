@@ -12,8 +12,23 @@ class CommunicationService {
   final _firestore = Firestore.instance;
   FlutterToast toast;
 
+  Future<void> deleteMessage(DateTime sentOn, String deleteMessage) async {
+    return await _firestore
+        .collection('messages-${userData.courseCode}')
+        .document('${userData.uid}-${sentOn.toString().substring(0, 20)}')
+        .updateData({
+      'text': deleteMessage,
+    }).catchError((e) {
+      print('$e 0000000000000000000000000000000000000000000000');
+    });
+  }
+
   Future<void> sendMessage(Message message) async {
-    return await _firestore.collection('messages-${userData.courseCode}').add({
+    return await _firestore
+        .collection('messages-${userData.courseCode}')
+        .document(
+            '${userData.uid}-${message.dateTime.toString().substring(0, 20)}')
+        .setData({
       'sentOn': message.dateTime,
       'text': message.text,
       'sender': message.sender,

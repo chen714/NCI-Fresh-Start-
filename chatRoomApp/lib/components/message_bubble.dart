@@ -44,10 +44,9 @@ class MessageBubble extends StatelessWidget {
                     child: CircularProfileAvatar(
                       '',
                       radius: 25,
-                      backgroundColor:
-                          msg.isMe ? Colors.indigo : Colors.blueGrey,
+                      backgroundColor: Colors.blueGrey,
                       initialsText: Text(
-                        msg.sender[0],
+                        msg.senderDisplayName[0],
                         style: TextStyle(fontSize: 40, color: Colors.white),
                       ),
                     ),
@@ -59,17 +58,11 @@ class MessageBubble extends StatelessWidget {
             children: <Widget>[
               senderName(),
               Material(
-                borderRadius: msg.isMe
-                    ? BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(30.0),
-                      )
-                    : BorderRadius.only(
-                        topRight: Radius.circular(30.0),
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(30.0),
-                      ),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30.0),
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
+                ),
                 elevation: 10.0,
                 color: kSecondaryColor,
                 child: Padding(
@@ -110,17 +103,11 @@ class MessageBubble extends StatelessWidget {
             children: <Widget>[
               senderName(),
               Material(
-                borderRadius: msg.isMe
-                    ? BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(30.0),
-                      )
-                    : BorderRadius.only(
-                        topRight: Radius.circular(30.0),
-                        bottomLeft: Radius.circular(30.0),
-                        bottomRight: Radius.circular(30.0),
-                      ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
+                ),
                 elevation: 10.0,
                 color: kPrimaryColour,
                 child: Padding(
@@ -152,9 +139,9 @@ class MessageBubble extends StatelessWidget {
               child: CircularProfileAvatar(
                 '',
                 radius: 25,
-                backgroundColor: msg.isMe ? Colors.indigo : Colors.blueGrey,
+                backgroundColor: Colors.indigo,
                 initialsText: Text(
-                  msg.sender[0],
+                  msg.senderDisplayName[0],
                   style: TextStyle(fontSize: 40, color: Colors.white),
                 ),
               ),
