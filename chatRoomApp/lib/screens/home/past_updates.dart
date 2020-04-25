@@ -2,7 +2,7 @@ import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
-import 'package:provider/provider.dart';
+import 'package:flash_chat/components/class_update_post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,7 +76,7 @@ class MessageStream extends StatelessWidget {
             );
           }
           final messages = snapshot.data.documents.reversed;
-          List<MessageBubble> messageWidgets = [];
+          List<ClassUpdatePostItem> postWidgets = [];
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
@@ -91,15 +91,17 @@ class MessageStream extends StatelessWidget {
               isImage: false,
               dateTime: sentOn,
             );
-            final messageBubble = MessageBubble(msg: msg);
+            final ClassUpdatePostItem postItem = ClassUpdatePostItem(
+              post: msg,
+            );
 
-            messageWidgets.add(messageBubble);
+            postWidgets.add(postItem);
           }
           return Expanded(
             child: ListView(
               reverse: true,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              children: messageWidgets,
+              children: postWidgets,
             ),
           );
         });

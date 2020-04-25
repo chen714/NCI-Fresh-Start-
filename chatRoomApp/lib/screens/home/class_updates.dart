@@ -7,7 +7,8 @@ import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants/constants.dart';
+
+import 'package:flash_chat/components/class_update_post_item.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/message_bubble.dart';
@@ -16,7 +17,7 @@ CommunicationService chatService;
 
 class ClassUpdates extends StatefulWidget {
   ClassUpdates({this.userData});
-  UserData userData;
+  final UserData userData;
   @override
   _ClassUpdatesState createState() => _ClassUpdatesState();
 }
@@ -82,7 +83,7 @@ class MessageStream extends StatelessWidget {
             );
           }
           final messages = snapshot.data.documents.reversed;
-          List<MessageBubble> messageWidgets = [];
+          List<ClassUpdatePostItem> postWidgets = [];
           for (var message in messages) {
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
@@ -97,15 +98,17 @@ class MessageStream extends StatelessWidget {
               isImage: false,
               dateTime: sentOn,
             );
-            MessageBubble messageBubble = MessageBubble(msg: msg);
+            ClassUpdatePostItem postItem = ClassUpdatePostItem(
+              post: msg,
+            );
 
-            messageWidgets.add(messageBubble);
+            postWidgets.add(postItem);
           }
           return Expanded(
             child: ListView(
               reverse: true,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              children: messageWidgets,
+              children: postWidgets,
             ),
           );
         });
