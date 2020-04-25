@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/shared/flutterToast.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +15,10 @@ class CommunicationService {
     return await _firestore
         .collection('messages-${userData.courseCode}')
         .document('${userData.uid}-${sentOn.toString().substring(0, 20)}')
-        .updateData({
-      'text': deleteMessage,
-    }).catchError((e) {
-      print('$e 0000000000000000000000000000000000000000000000');
+        .updateData(
+      {'text': deleteMessage, 'isImage': false},
+    ).catchError((e) {
+      print('$e');
     });
   }
 

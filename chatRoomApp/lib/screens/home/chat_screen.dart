@@ -114,7 +114,9 @@ class _ChatScreenState extends State<ChatScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
-                                  return ImageUploadScreen();
+                                  return ImageUploadScreen(
+                                    userData: userData,
+                                  );
                                 }),
                               );
                             },
@@ -200,29 +202,32 @@ class MessageStream extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      SizedBox(
-                                        width: 120,
-                                        child: RoundedButton(
-                                            title: 'Copy Text 📋',
-                                            colour: kPrimaryColourLight,
-                                            onPressed: () {
-                                              Clipboard.setData(
-                                                      new ClipboardData(
-                                                          text: messageText))
-                                                  .whenComplete(() {
-                                                showSimpleNotification(
-                                                  Text(
-                                                      "Message copied to clipboard."),
-                                                  background: Colors.green,
-                                                );
-                                              }).catchError((e) {
-                                                showSimpleNotification(
-                                                  Text(
-                                                      "Opps.. Something went wrong please try again."),
-                                                  background: Colors.red,
-                                                );
-                                              });
-                                            }),
+                                      Visibility(
+                                        visible: !msg.isImage,
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: RoundedButton(
+                                              title: 'Copy Text 📋',
+                                              colour: kPrimaryColourLight,
+                                              onPressed: () {
+                                                Clipboard.setData(
+                                                        new ClipboardData(
+                                                            text: messageText))
+                                                    .whenComplete(() {
+                                                  showSimpleNotification(
+                                                    Text(
+                                                        "Message copied to clipboard."),
+                                                    background: Colors.green,
+                                                  );
+                                                }).catchError((e) {
+                                                  showSimpleNotification(
+                                                    Text(
+                                                        "Opps.. Something went wrong please try again."),
+                                                    background: Colors.red,
+                                                  );
+                                                });
+                                              }),
+                                        ),
                                       ),
                                       Visibility(
                                         visible: messageSender == userLoggedIn,
@@ -233,6 +238,7 @@ class MessageStream extends StatelessWidget {
                                               colour: kSecondaryColorLight,
                                               onPressed: () {
                                                 _showConfirmationDialog(
+                                                    messageImage,
                                                     dateTime,
                                                     commsService,
                                                     context,
@@ -262,13 +268,19 @@ class MessageStream extends StatelessWidget {
         });
   }
 
-  _showConfirmationDialog(DateTime sentOn, CommunicationService commsService,
-      BuildContext context, String originalMessage) {
+  _showConfirmationDialog(
+      bool isImage,
+      DateTime sentOn,
+      CommunicationService commsService,
+      BuildContext context,
+      String originalMessage) {
     Alert(
       context: context,
       type: AlertType.warning,
-      title: "Your about to delete your message: ",
-      desc: originalMessage,
+      title: "Your about to delete your ${isImage ? 'image' : 'message'}: ",
+      desc: isImage
+          ? 'Your image will be permently deleted and cannot be recovered. Are you sure you want to remove the image from the chat?'
+          : originalMessage,
       buttons: [
         DialogButton(
           child: Text(
@@ -280,7 +292,9 @@ class MessageStream extends StatelessWidget {
                 .deleteMessage(
                     sentOn,
                     encrypter
-                        .encrypt('Message deleted by sender.', iv: iv)
+                        .encrypt(
+                            '${isImage ? 'Image' : 'Message'} deleted by sender.',
+                            iv: iv)
                         .base64)
                 .whenComplete(() {
               showSimpleNotification(

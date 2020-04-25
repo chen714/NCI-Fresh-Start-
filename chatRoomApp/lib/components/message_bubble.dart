@@ -7,7 +7,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class MessageBubble extends StatelessWidget {
   MessageBubble({@required this.msg});
+
   final Message msg;
+
   @override
   Widget build(BuildContext context) {
     return msg.isMe
@@ -27,30 +29,13 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: msg.sender == 'virtualassistant@ncirl.ie'
-                ? Material(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    elevation: 10,
-                    child: CircleAvatar(
-                        maxRadius: 25,
-                        backgroundImage: AssetImage('images/bot.png')),
-                  )
-                : Material(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    elevation: 10,
-                    child: CircularProfileAvatar(
-                      '',
-                      radius: 25,
-                      backgroundColor: Colors.blueGrey,
-                      initialsText: Text(
-                        msg.senderDisplayName[0],
-                        style: TextStyle(fontSize: 40, color: Colors.white),
-                      ),
-                    ),
-                  ),
+                ? botAvatar()
+                : circularProfileAvatar(msg.senderDisplayName, msg.isMe),
           ),
           Column(
             crossAxisAlignment:
@@ -58,12 +43,8 @@ class MessageBubble extends StatelessWidget {
             children: <Widget>[
               senderName(),
               Material(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30.0),
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
-                ),
-                elevation: 10.0,
+                borderRadius: widgetBorder(msg.isMe),
+                elevation: 8.0,
                 color: kSecondaryColor,
                 child: Padding(
                   padding:
@@ -74,16 +55,7 @@ class MessageBubble extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 5),
-                child: Text(
-                  '${msg.dateTime.toString().substring(2, 16)}',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black38,
-                  ),
-                ),
-              )
+              sentOnDateTime(msg.isMe)
             ],
           ),
         ],
@@ -96,6 +68,7 @@ class MessageBubble extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Column(
             crossAxisAlignment:
@@ -103,12 +76,8 @@ class MessageBubble extends StatelessWidget {
             children: <Widget>[
               senderName(),
               Material(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
-                ),
-                elevation: 10.0,
+                borderRadius: widgetBorder(msg.isMe),
+                elevation: 8.0,
                 color: kPrimaryColour,
                 child: Padding(
                   padding:
@@ -119,37 +88,78 @@ class MessageBubble extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20, top: 5),
-                child: Text(
-                  '${msg.dateTime.toString().substring(2, 16)}',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black38,
-                  ),
-                ),
-              )
+              sentOnDateTime(msg.isMe)
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Material(
-              borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              elevation: 10,
-              child: CircularProfileAvatar(
-                '',
-                radius: 25,
-                backgroundColor: Colors.indigo,
-                initialsText: Text(
-                  msg.senderDisplayName[0],
-                  style: TextStyle(fontSize: 40, color: Colors.white),
-                ),
-              ),
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: circularProfileAvatar(msg.senderDisplayName, msg.isMe)),
         ],
       ),
     );
+  }
+
+  Widget circularProfileAvatar(String senderName, bool isMe) {
+    return Material(
+      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+      elevation: 8.0,
+      child: CircularProfileAvatar(
+        '',
+        radius: 25,
+        backgroundColor: isMe ? Colors.indigo : Colors.blueGrey,
+        initialsText: Text(
+          senderName[0],
+          style: TextStyle(fontSize: 40, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget sentOnDateTime(bool isMe) {
+    if (isMe)
+      return Padding(
+        padding: const EdgeInsets.only(right: 20, top: 5),
+        child: Text(
+          '${msg.dateTime.toString().substring(2, 16)}',
+          style: TextStyle(
+            fontSize: 12.0,
+            color: Colors.black38,
+          ),
+        ),
+      );
+    else
+      return Padding(
+        padding: const EdgeInsets.only(left: 10, top: 5),
+        child: Text(
+          '${msg.dateTime.toString().substring(2, 16)}',
+          style: TextStyle(
+            fontSize: 12.0,
+            color: Colors.black38,
+          ),
+        ),
+      );
+  }
+
+  Widget botAvatar() {
+    return Material(
+      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+      elevation: 8.0,
+      child: CircleAvatar(
+          maxRadius: 25, backgroundImage: AssetImage('images/bot.png')),
+    );
+  }
+
+  BorderRadiusGeometry widgetBorder(bool isMe) {
+    if (isMe)
+      return BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0));
+    else
+      return BorderRadius.only(
+          topRight: Radius.circular(30.0),
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0));
   }
 
   Widget senderName() {
@@ -163,8 +173,6 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget checkIsImage() {
-    print(
-        '-------------------------------------------------------------isImage: ${msg.isImage}');
     if (msg.isImage == true) {
       return CachedNetworkImage(
         imageUrl: msg.text,

@@ -7,22 +7,20 @@ import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flash_chat/services/UserDbService.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 final _firestore = Firestore.instance;
 
 class ImageUploadScreen extends StatefulWidget {
+  final UserData userData;
+  ImageUploadScreen({this.userData});
+
   @override
   _ImageUploadScreenState createState() => _ImageUploadScreenState();
 }
 
 class _ImageUploadScreenState extends State<ImageUploadScreen> {
-  User loggedInUser;
-  UserData userData;
-  UserDbService _userDbService;
-  String courseCode;
   File _imageFile;
   String _imageFileUrl;
   DateTime now = new DateTime.now();
@@ -48,63 +46,42 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     final iv = encrypt.IV.fromLength(16);
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
     String filePath =
-        'images-$courseCode/${DateTime.now()}-${loggedInUser.email}';
+        'images-${widget.userData.courseCode}/${DateTime.now()}-${widget.userData.email}';
     try {
       await _storage.ref().child(filePath).putFile(_imageFile).onComplete;
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: "An error has occured!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 3,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      showSimpleNotification(
+        Text(
+            "An error occured while sending your image, Please try again later. "),
+        background: Colors.red,
+      );
     }
     if (_imageFile == null) {
-      Fluttertoast.showToast(
-          msg: "Please upload a file!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 3,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      showSimpleNotification(
+        Text("Please upload a file. "),
+        background: Colors.red,
+      );
     } else {
       _storage.ref().child(filePath).getDownloadURL().then((fileURL) {
         _imageFileUrl = fileURL;
-        _firestore.collection('messages-$courseCode').add({
+        _firestore
+            .collection('messages-${widget.userData.courseCode}')
+            .document(
+                '${widget.userData.uid}-${now.toString().substring(0, 20)}')
+            .setData({
           'sentOn': now,
           'text': encrypter.encrypt(_imageFileUrl, iv: iv).base64,
-          'sender': loggedInUser.email,
+          'senderDisplayName': widget.userData.name,
+          'sender': widget.userData.email,
           'isImage': true,
         });
+      }).whenComplete(() {
+        showSimpleNotification(
+          Text("Image upload complete. "),
+          background: Colors.green,
+        );
+        _clear();
       });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUserData();
-  }
-
-  void getCurrentUserData() async {
-    try {
-      final user = await _authService.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-        _userDbService = UserDbService(uid: loggedInUser.uid);
-        userData = await _userDbService.getUserDataFromUid();
-        setState(() {
-          courseCode = userData.courseCode;
-        });
-
-        print('----------------------------------$courseCode');
-        print(loggedInUser.email);
-      }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -113,7 +90,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Upload an Image - $courseCode 🎈',
+          'Upload an Image - ${widget.userData.courseCode} 🎈',
         ),
         backgroundColor: kPrimaryColourDark,
         actions: <Widget>[
@@ -207,8 +184,11 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                   title: "📤",
                   bold: true,
                   onPressed: () {
+                    showSimpleNotification(
+                      Text("Image uploading... "),
+                      background: Colors.amberAccent,
+                    );
                     _upload();
-                    Navigator.pop(context);
                   },
                 ),
               ),

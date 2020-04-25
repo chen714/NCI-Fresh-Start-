@@ -4,6 +4,7 @@ import 'package:flash_chat/constants/courseCode.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/screens/home/chat_screen.dart';
 import 'package:flash_chat/screens/home/class_updates.dart';
+import 'package:flash_chat/validators/textFormFieldValidators.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:flash_chat/services/UserDbService.dart';
@@ -97,14 +98,6 @@ class _SetUserDataState extends State<SetUserData> {
   String _courseCode;
   String _error = '';
 
-  bool isFaculty(String email) {
-    if (email.contains('@ncirl.ie')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Widget sizedBox() {
     return SizedBox(
       height: 20,
@@ -112,7 +105,7 @@ class _SetUserDataState extends State<SetUserData> {
   }
 
   Widget showCourseCodeDropdown() {
-    if (isFaculty(widget.email)) {
+    if (TextFormFieldValidator.isFaculty(widget.email)) {
       return SizedBox(
         height: 0,
       );
@@ -209,7 +202,10 @@ class _SetUserDataState extends State<SetUserData> {
                               },
                             ),
                             SizedBox(
-                              height: !isFaculty(widget.email) ? 20 : 0,
+                              height: !TextFormFieldValidator.isFaculty(
+                                      widget.email)
+                                  ? 20
+                                  : 0,
                             ),
                             showCourseCodeDropdown(),
                             SizedBox(
@@ -221,7 +217,8 @@ class _SetUserDataState extends State<SetUserData> {
                               onPressed: () {
                                 setState(() async {
                                   if (_formKey.currentState.validate()) {
-                                    if (isFaculty(widget.email)) {
+                                    if (TextFormFieldValidator.isFaculty(
+                                        widget.email)) {
                                       await userDbService.updateUserData(
                                           email: widget.email,
                                           name: _name.trim(),

@@ -1,4 +1,11 @@
 class TextFormFieldValidator {
+  static bool isFaculty(String email) {
+    if (validateEmail(email) == null && email.contains('@ncirl.ie'))
+      return true;
+    else
+      return false;
+  }
+
   static String validateEmail(String email) {
     if (email.isEmpty)
       return 'Email can not be empty';
