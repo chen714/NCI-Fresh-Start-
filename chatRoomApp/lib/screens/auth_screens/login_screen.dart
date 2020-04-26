@@ -2,6 +2,7 @@ import 'package:flash_chat/constants/colorAndDesignConstants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
 import 'package:flash_chat/constants/constants.dart';
 import 'package:flash_chat/screens/auth_screens/password_reset_screen.dart';
+import 'package:flash_chat/validators/textFormFieldValidators.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20.0),
                         TextFormField(
                           validator: (value) =>
-                              value.isEmpty ? 'Enter an email' : null,
+                              TextFormFieldValidator.validateEmail(_email),
                           decoration:
                               kTextFieldDecoration.copyWith(hintText: 'email'),
                           onChanged: (value) {
@@ -61,9 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: kTextFieldDecoration.copyWith(
                               hintText: 'password'),
                           obscureText: true,
-                          validator: (value) => value.length < 8
-                              ? 'Enter a password that\'s longer then 8 characters'
-                              : null,
+                          validator: (value) =>
+                              TextFormFieldValidator.validatePassword(value),
                           onChanged: (value) {
                             setState(() {
                               _password = value;

@@ -4,6 +4,7 @@ import 'package:flash_chat/models/message.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flash_chat/services/authService.dart';
+import 'package:flash_chat/validators/textFormFieldValidators.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants/constants.dart';
 import 'package:flash_chat/components/RoundedButton.dart';
@@ -66,7 +67,8 @@ class _SendUpdateState extends State<SendUpdate> {
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your update',
                     ),
-                    validator: (value) => value.isEmpty ? 'Required' : null,
+                    validator: (value) =>
+                        TextFormFieldValidator.validateUpdate(value),
                     onChanged: (value) {
                       setState(() {
                         _message = value;

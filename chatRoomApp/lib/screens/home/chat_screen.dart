@@ -8,6 +8,7 @@ import 'package:flash_chat/services/UserDbService.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flash_chat/shared/loading.dart';
+import 'package:flash_chat/validators/textFormFieldValidators.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants/constants.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -82,9 +83,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
-                            child: TextField(
+                            child: TextFormField(
                               minLines: 1,
                               maxLines: 8,
+                              validator: (value) =>
+                                  TextFormFieldValidator.validateMessage(value),
                               controller: messageTextController,
                               onChanged: (value) {
                                 //Do something with the user input.

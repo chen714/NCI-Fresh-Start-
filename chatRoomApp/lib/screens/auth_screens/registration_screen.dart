@@ -6,10 +6,9 @@ import 'package:flash_chat/services/authService.dart';
 import 'package:flash_chat/shared/loading.dart';
 import 'package:password_compromised/password_compromised.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flash_chat/validators/textFormFieldValidators.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  static const id = 'registration_screen';
-
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
@@ -50,7 +49,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         SizedBox(height: 20.0),
                         TextFormField(
                           validator: (value) =>
-                              value.isEmpty ? 'Enter an email' : null,
+                              TextFormFieldValidator.validateEmail(value),
                           decoration:
                               kTextFieldDecoration.copyWith(hintText: 'email'),
                           onChanged: (value) {
@@ -64,9 +63,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           decoration: kTextFieldDecoration.copyWith(
                               hintText: 'password'),
                           obscureText: true,
-                          validator: (value) => value.length < 8
-                              ? 'Enter a password that\'s longer then 8 characters'
-                              : null,
+                          validator: (value) =>
+                              TextFormFieldValidator.validatePassword(value),
                           onChanged: (value) {
                             setState(() {
                               _password = value;
@@ -81,7 +79,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           validator: (value) => value != _password
                               ? 'Passwords don\'t match'
                               : null,
-                          onChanged: (value) {},
                         ),
                         SizedBox(height: 20.0),
                         RoundedButton(
@@ -107,7 +104,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       title: "Email Verification Required!",
                                       content:
-                                          "Registration successful, please check your student mail for the email verification link. After email has been verified please proceed to login. ");
+                                          "Registration successful, please check your college mail for the email verification link. After email has been verified please proceed to login. ");
                                 } else {
                                   setState(() {
                                     _error =

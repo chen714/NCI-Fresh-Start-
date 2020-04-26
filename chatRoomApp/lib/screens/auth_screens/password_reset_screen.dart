@@ -49,7 +49,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       hintText: 'Enter your email ',
                     ),
                     validator: (value) =>
-                        TextFormFieldValidator.validateEmail(_email),
+                        TextFormFieldValidator.validateEmail(value),
                     onChanged: (value) {
                       setState(() {
                         _email = value;

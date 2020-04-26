@@ -194,7 +194,7 @@ class _SetUserDataState extends State<SetUserData> {
                                 hintText: 'Enter your name',
                               ),
                               validator: (value) =>
-                                  value.isEmpty ? 'Required' : null,
+                                  TextFormFieldValidator.validateName(value),
                               onChanged: (value) {
                                 setState(() {
                                   _name = value;
