@@ -1,6 +1,6 @@
 final List<String> kCourseCode = [
-  'BSHC1',
-  'BSHC2',
-  'BSHC3',
-  'BSHC4',
+  'BSHC4CYB - Cyber Security',
+  'BSHC4DA - Data Analytics',
+  'BSHC4IOT - Internet of Things',
+  'BSHC4GD - Game Development ',
 ];
