@@ -18,7 +18,6 @@ import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-final _firestore = Firestore.instance;
 final key = encrypt.Key.fromLength(32);
 final iv = encrypt.IV.fromLength(16);
 final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -31,7 +30,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  @override
   final messageTextController = TextEditingController();
   final _authService = AuthService();
 
@@ -302,7 +300,6 @@ class MessageStream extends StatelessWidget {
                 background: Colors.green,
               );
             }).catchError((e) {
-              print(e);
               showSimpleNotification(
                 Text(
                     "An error occured while deleteing your message, Please try again later. "),

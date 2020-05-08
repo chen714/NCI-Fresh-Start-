@@ -1,6 +1,7 @@
 import 'package:flash_chat/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class UserDbService {
   final String uid;

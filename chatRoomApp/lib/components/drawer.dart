@@ -4,7 +4,6 @@ import 'package:flash_chat/screens/home/nci_bot.dart';
 import 'package:flash_chat/screens/home/timetable_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/models/user.dart';
-import 'package:provider/provider.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flash_chat/screens/home/send_updates.dart';
 import 'package:flash_chat/screens/home/class_updates.dart';
@@ -21,12 +20,12 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
     return Drawer(
       child: new ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text('${userData.name} \n${userData.email}'),
+            accountEmail: Text('${userData.email}'),
+            accountName: Text('${userData.name}'),
             currentAccountPicture: GestureDetector(
               child: CircularProfileAvatar(
                 '',
@@ -57,7 +56,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Divider(),
           InkWell(
             onTap: () {
-              print('------------------------------VIRTUAL ASSISTANT');
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
@@ -73,7 +71,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Divider(),
           InkWell(
             onTap: () {
-              print('------------------------------TIMETABLE');
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {

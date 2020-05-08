@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/components/class_update_post_item.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flash_chat/components/message_bubble.dart';
 
 CommunicationService chatService;
 

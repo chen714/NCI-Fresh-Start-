@@ -15,7 +15,6 @@ void main() => runApp(FlashChat());
 class FlashChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthService _auth = AuthService();
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: OverlaySupport(
@@ -26,8 +25,6 @@ class FlashChat extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Loading();
               } else {
-                print(
-                    '!!!!!!!!!!!!!!!!!!!!!!!!!!snapshot data: ${snapshot.data}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
                 if (snapshot.data == true) {
                   return LocalAuth();
                 }

@@ -1,3 +1,6 @@
+//To add a course code please use the format
+//    'COURSECODE - COURSEDESCRIPTION',
+
 final List<String> kCourseCode = [
   'BSHC4CYB - Cyber Security',
   'BSHC4DA - Data Analytics',

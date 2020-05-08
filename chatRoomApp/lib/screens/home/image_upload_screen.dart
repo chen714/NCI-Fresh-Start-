@@ -9,6 +9,7 @@ import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'dart:async';
 
 final _firestore = Firestore.instance;
 

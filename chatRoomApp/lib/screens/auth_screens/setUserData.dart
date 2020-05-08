@@ -159,8 +159,6 @@ class _SetUserDataState extends State<SetUserData> {
 
   @override
   Widget build(BuildContext context) {
-    print('++++++++++++++++++++++++++++++++++++++++++++++++ ${widget.uid}');
-
     UserDbService userDbService = UserDbService(uid: widget.uid);
 
     return FutureBuilder<bool>(
