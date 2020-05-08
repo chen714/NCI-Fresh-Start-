@@ -20,9 +20,7 @@ class AuthService {
 
   //auth change user stream
   Stream<User> get user {
-    return _auth.onAuthStateChanged
-        //.map((FirebaseUser user) => _userFromFirebaseUser(user)); -- the same as the below line
-        .map(_userFromFirebaseUser);
+    return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
   }
 
   Future<void> resetPassword(String email) {
@@ -51,12 +49,27 @@ class AuthService {
             toastColor: Colors.red,
             textColor: Colors.white);
 
-        print(e.message);
         return null;
       }
     } catch (e) {
-      print(e.toString());
-      return null;
+      if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+        toast.showToast(
+            message:
+                "Email in use, Please use the recover email button in the login section to recover your password.",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      } else if (e.code == 'ERROR_NETWORK_REQUEST_FAILED') {
+        toast.showToast(
+            message:
+                "Network request failed, please check your internet connection",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        toast.showToast(
+            message: "An error has occured please check input fields.",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      }
     }
   }
 
@@ -80,7 +93,26 @@ class AuthService {
       }
       return _userFromFirebaseUser(fUser);
     } catch (e) {
-      print(e.toString());
+      if (e.code == 'ERROR_WRONG_PASSWORD' ||
+          e.code == 'ERROR_USER_NOT_FOUND') {
+        toast.showToast(
+            message:
+                "Incorrect username or passowed please check login credentials and try again.",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      } else if (e.code == 'ERROR_NETWORK_REQUEST_FAILED') {
+        toast.showToast(
+            message:
+                "Network request failed, please check your internet connection",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        toast.showToast(
+            message: "An error has occured pleased try again later",
+            toastColor: Colors.red,
+            textColor: Colors.white);
+      }
+
       return null;
     }
   }
@@ -90,7 +122,11 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
+      toast.showToast(
+          message:
+              "An error occurred while logging you out. Please check internet connection and try again later. ",
+          toastColor: Colors.red,
+          textColor: Colors.white);
       return null;
     }
   }

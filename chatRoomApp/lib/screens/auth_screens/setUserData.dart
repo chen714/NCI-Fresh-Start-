@@ -96,6 +96,7 @@ class _SetUserDataState extends State<SetUserData> {
   String _name;
 
   String _courseCode;
+  String _courseDescription;
   String _error = '';
 
   Widget sizedBox() {
@@ -124,23 +125,28 @@ class _SetUserDataState extends State<SetUserData> {
               ),
             ),
             SizedBox(
-              width: 150,
+              width: 180,
               child: DropdownButtonFormField(
                 decoration: kTextFieldDecoration,
-                value: _courseCode,
+                validator: (value) => value == null ? 'Required' : null,
+                value: _courseDescription,
                 icon: Icon(Icons.keyboard_arrow_down),
                 iconSize: 24,
+                itemHeight: 50,
                 elevation: 16,
                 style: TextStyle(color: Colors.black),
                 onChanged: (String newValue) {
                   setState(() {
-                    _courseCode = newValue;
+                    _courseDescription = newValue;
+                    int _courseCodeIndex = newValue.indexOf('-');
+                    _courseCode =
+                        newValue.substring(0, _courseCodeIndex).trim();
                   });
                 },
                 items: kCourseCode.map((courCode) {
                   return DropdownMenuItem(
                     value: courCode,
-                    child: Text('$courCode'),
+                    child: Container(width: 116, child: Text('$courCode')),
                   );
                 }).toList(),
               ),
@@ -153,8 +159,6 @@ class _SetUserDataState extends State<SetUserData> {
 
   @override
   Widget build(BuildContext context) {
-    print('++++++++++++++++++++++++++++++++++++++++++++++++ ${widget.uid}');
-
     UserDbService userDbService = UserDbService(uid: widget.uid);
 
     return FutureBuilder<bool>(

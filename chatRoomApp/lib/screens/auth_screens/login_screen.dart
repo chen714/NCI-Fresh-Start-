@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               setState(() => _showSpinner = true);
-                              print('$_email|');
+
                               dynamic result =
                                   await _auth.signInWithEmailAndPassword(
                                       _email.replaceAll(' ', ''), _password);

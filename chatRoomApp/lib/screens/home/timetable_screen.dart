@@ -1,6 +1,5 @@
 import 'package:easy_web_view/easy_web_view.dart';
 import 'package:flash_chat/constants/colorAndDesignConstants.dart';
-import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
       appBar: AppBar(
         title: Text('Timetable'),
         actions: <Widget>[

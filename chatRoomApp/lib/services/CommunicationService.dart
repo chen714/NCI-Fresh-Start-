@@ -17,9 +17,7 @@ class CommunicationService {
         .document('${userData.uid}-${sentOn.toString().substring(0, 20)}')
         .updateData(
       {'text': deleteMessage, 'isImage': false},
-    ).catchError((e) {
-      print('$e');
-    });
+    ).catchError((e) {});
   }
 
   Future<void> sendMessage(Message message) async {
@@ -34,7 +32,6 @@ class CommunicationService {
       'senderDisplayName': message.senderDisplayName,
       'isImage': message.isImage,
     }).catchError((onError) {
-      print(onError);
       toast.showToast(
           message:
               'Something went wrong while sending your message. Try again later.',
@@ -78,7 +75,6 @@ class CommunicationService {
       'text': message.text,
       'sender': message.sender,
     }).catchError((onError) {
-      print(onError);
       toast.showToast(
           message:
               'Something went wrong while sending your class update. Try again later.',
@@ -93,7 +89,6 @@ class CommunicationService {
         'senderName': message.senderDisplayName
       });
     }).catchError((onError) {
-      print(onError);
       toast.showToast(
           message:
               'Something went wrong while sending your class update. Try again later.',
@@ -107,7 +102,6 @@ class CommunicationService {
       'text': message.text,
       'sender': message.sender,
     }).catchError((onError) {
-      print(onError);
       toast.showToast(
           message:
               'Something went wrong while sending your class update. Try again later.',

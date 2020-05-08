@@ -26,6 +26,7 @@ class _SendUpdateState extends State<SendUpdate> {
   //form value
   String _message;
   String _courseCode;
+  String _courseCodeDescription;
   String _error = '';
 
   @override
@@ -36,7 +37,10 @@ class _SendUpdateState extends State<SendUpdate> {
       appBar: AppBar(
         backgroundColor: kPrimaryColourDark,
         elevation: 0.0,
-        title: Text('🚀 Send Updates To your Class'),
+        title: Text(
+          '🚀 Send Updates To your Class',
+          style: TextStyle(fontSize: 18),
+        ),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
@@ -64,6 +68,8 @@ class _SendUpdateState extends State<SendUpdate> {
                   ),
                   TextFormField(
                     maxLines: 6,
+                    maxLength: 200,
+                    maxLengthEnforced: true,
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your update',
                     ),
@@ -92,25 +98,31 @@ class _SendUpdateState extends State<SendUpdate> {
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width: 180,
                           child: DropdownButtonFormField(
                             validator: (value) =>
                                 value == null ? 'Required' : null,
                             decoration: kTextFieldDecoration,
-                            value: _courseCode,
+                            value: _courseCodeDescription,
                             icon: Icon(Icons.keyboard_arrow_down),
+                            itemHeight: 50,
                             iconSize: 24,
                             elevation: 16,
                             style: TextStyle(color: Colors.black),
                             onChanged: (String newValue) {
                               setState(() {
-                                _courseCode = newValue;
+                                _courseCodeDescription = newValue;
+                                int _courseCodeIndex = newValue.indexOf('-');
+                                _courseCode = newValue
+                                    .substring(0, _courseCodeIndex)
+                                    .trim();
                               });
                             },
                             items: kCourseCode.map((courCode) {
                               return DropdownMenuItem(
                                 value: courCode,
-                                child: Text('$courCode'),
+                                child: Container(
+                                    width: 116, child: Text('$courCode')),
                               );
                             }).toList(),
                           ),

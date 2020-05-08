@@ -1,12 +1,10 @@
 import 'package:flash_chat/constants/colorAndDesignConstants.dart';
-import 'package:flash_chat/components/drawer.dart';
 import 'package:flash_chat/models/user.dart';
 import 'package:flash_chat/services/CommunicationService.dart';
 import 'package:flash_chat/components/class_update_post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/services/authService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flash_chat/models/message.dart';
 
 class PastUpdates extends StatefulWidget {
@@ -25,7 +23,6 @@ class _PastUpdatesState extends State<PastUpdates> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
