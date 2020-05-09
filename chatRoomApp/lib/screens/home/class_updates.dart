@@ -29,9 +29,6 @@ class _ClassUpdatesState extends State<ClassUpdates> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(
-        userData: userData,
-      ),
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
