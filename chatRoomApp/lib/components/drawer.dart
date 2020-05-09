@@ -41,12 +41,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return ChatScreen();
-                }),
-              );
+              Navigator.pop(context);
             },
             child: ListTile(
               title: Text(userData.isFaculty ? 'Faculty Chat' : 'Class Chat'),
