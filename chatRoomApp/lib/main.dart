@@ -18,22 +18,23 @@ class FlashChat extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: OverlaySupport(
-        child: MaterialApp(
-          home: FutureBuilder<bool>(
-            future: LocalAuthService().authorizeNow(),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (!snapshot.hasData) {
-                return Loading();
-              } else {
-                if (snapshot.data == true) {
-                  return LocalAuth();
-                }
-
-                return ErrorScreen();
-              }
-            },
-          ),
-        ),
+        child: MaterialApp(home: LocalAuth()
+            //local auth turned off
+//          FutureBuilder<bool>(
+//            future: LocalAuthService().authorizeNow(),
+//            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//              if (!snapshot.hasData) {
+//                return Loading();
+//              } else {
+//                if (snapshot.data == true) {
+//                  return LocalAuth();
+//                }
+//
+//                return ErrorScreen();
+//              }
+//            },
+//          ),
+            ),
       ),
     );
   }
